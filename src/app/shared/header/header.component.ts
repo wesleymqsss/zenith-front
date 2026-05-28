@@ -42,9 +42,14 @@ export class HeaderComponent {
         routerLink: ['/lista-comunidade'],
       },
       {
-        label: 'Minhas Missões - histórico',
+        label: 'Histórico de Missões',
         icon: 'pi pi pi-users',
         routerLink: ['/minhas-missoes-historico'],
+      },
+      {
+        label: 'Missões',
+        icon: 'pi pi-plus',
+        routerLink: ['/missoes-criados'],
       },
       {
         label: 'Sair',

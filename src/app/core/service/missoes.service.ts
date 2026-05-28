@@ -15,14 +15,40 @@ import { ApiResponsePagina } from '../interface/respostaPaginada';
 })
 export class MissoesService {
   private url = `${environment.api_url}Missoes/`;
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private readonly _http: HttpClient) { }
 
   getMissoes(): Observable<MissaoResponse[]> {
     return this._http.get<MissaoResponse[]>(`${this.url}filtrar`);
   }
 
+  getMissoesPorUsuario(idUsuario: number, tipoUsuario: 'criador' | 'aventureiro'): Observable<MissaoResponse[]> {
+    const param = tipoUsuario === 'criador' ? 'idCriador' : 'idAventureiro';
+    const params = new HttpParams().set(param, idUsuario.toString());
+    return this._http.get<MissaoResponse[]>(`${this.url}filtrar`, { params });
+  }
+
   aceitarMissao(id: number): Observable<MessageResponse> {
-    return this._http.post<MessageResponse>(`${this.url}${id}/aceitar`, null);
+    const payload = {
+      status: "Em andamento",
+    }
+
+    return this._http.post<MessageResponse>(`${this.url}${id}/aceitar`, payload);
+  }
+  
+  concluirMissao(id: number): Observable<MessageResponse> {
+    const payload = {
+      status: "Concluída",
+    }
+
+    return this._http.post<MessageResponse>(`${this.url}${id}/aceitar`, payload);
+  }
+
+  cancelarMissao(id: number): Observable<MessageResponse> {
+    const payload = {
+      status: "Cancelada",
+    }
+
+    return this._http.post<MessageResponse>(`${this.url}${id}/aceitar`, payload);
   }
 
   historicoMissoes(

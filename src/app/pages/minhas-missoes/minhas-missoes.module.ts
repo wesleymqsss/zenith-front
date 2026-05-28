@@ -5,6 +5,7 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../shared/shared.module';
 import { MinhasMissoesComponent } from './minhas-missoes.component';
 import { MinhasMissoesRoutingModule } from './minhas-missoes-routing.module';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { MinhasMissoesRoutingModule } from './minhas-missoes-routing.module';
     MaterialModule,
     SharedModule,
     MinhasMissoesRoutingModule,
-    PipesModule 
+    PipesModule,
+    TagModule 
   ],
   exports: [
     MinhasMissoesComponent

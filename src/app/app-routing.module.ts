@@ -22,6 +22,11 @@ const routes: Routes = [
   },
 
   {
+    path: 'missoes-criados',
+    loadChildren: () => import('./pages/missoes-criados/missoes-criados.module').then(m => m.MissoesCriadosModule)
+  },
+
+  {
     path: '',
     component: LoginComponent,
   },

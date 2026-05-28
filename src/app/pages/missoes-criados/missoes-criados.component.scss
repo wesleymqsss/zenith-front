@@ -1,0 +1,17 @@
+:host ::ng-deep {
+    .card-flex-content {
+      display: flex;
+      flex-direction: column;
+  
+      .p-card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+  
+      .p-card-content {
+        flex-grow: 1;
+      }
+    }
+  }
+  

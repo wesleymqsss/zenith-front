@@ -12,6 +12,7 @@ import { CardDashboardComponent } from "./card-dashboard/card-dashboard.componen
 import { Grafico2Component } from "./grafico-2/grafico-2.component";
 import { Grafico1Component } from "./grafico-1/grafico-1.component";
 import { DataNotFoundComponent } from './data-not-found/data-not-found.component';
+import { TagModule } from "primeng/tag";
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import { DataNotFoundComponent } from './data-not-found/data-not-found.component
         PipesModule,
         DirectivesModule,
         ReactiveFormsModule,
+        TagModule
         
     ],
     exports: [
@@ -41,7 +43,8 @@ import { DataNotFoundComponent } from './data-not-found/data-not-found.component
         CardDashboardComponent,
         Grafico2Component,
         Grafico1Component,
-        DataNotFoundComponent
+        DataNotFoundComponent,
+        TagModule
     ]
 })
 export class SharedModule { }
