@@ -1,0 +1,19 @@
+<div class="flex flex-col items-center justify-center p-8 md:p-12 text-center rounded-2xl border border-dashed border-surface-200 dark:border-surface-800 bg-gradient-to-b from-surface-50/50 to-surface-100/30 dark:from-surface-900/50 dark:to-surface-950/20 backdrop-blur-sm transition-all duration-300 hover:border-surface-300 dark:hover:border-surface-700 max-w-md mx-auto my-6 shadow-sm">
+  <div class="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-surface-100 dark:bg-surface-800/80 mb-6 animate-float">
+    <i [class]="icon + ' text-3xl text-surface-400 dark:text-surface-500'"></i>
+    <span class="absolute -top-1 -right-1 flex h-3 w-3">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 dark:bg-primary-500 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-3 w-3 bg-primary-500"></span>
+    </span>
+  </div>
+  
+  <h3 class="text-lg font-semibold text-surface-800 dark:text-surface-100 mb-2">
+    {{ title }}
+  </h3>
+  
+  <p class="text-sm text-white max-w-xs mb-6 leading-relaxed">
+    {{ message }}
+  </p>
+  
+  <ng-content></ng-content>
+</div>

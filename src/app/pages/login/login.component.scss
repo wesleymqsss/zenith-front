@@ -1,0 +1,22 @@
+.form {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.form-left {
+    width: 40%;
+    height: 41%;
+}
+
+.form-rigth {
+    width: 40%;
+    height: 49%;
+    background-color: #e7e7e7;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+}

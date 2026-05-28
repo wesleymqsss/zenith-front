@@ -1,0 +1,107 @@
+/* No seu arquivo CSS/SCSS do componente */
+
+:host {
+  /* Define a variável --p-breadcrumb-background
+    para o componente p-breadcrumb que está DENTRO deste host.
+  */
+  --p-breadcrumb-background: #fafafa; /* Este é o "slate-900" do Tailwind */
+}
+
+.header-login {
+    text-align: center;
+    font-weight: bold;
+    color: blue;
+    font-size: 18px;
+}
+
+.info-user {
+    gap: 5px;
+    display: flex;
+    text-align: center;
+    font-weight: bold;
+    color: var(--p-slate-700);
+    font-size: 16px;
+    padding-right: 8px;
+
+    .bar {
+        background-color: var(--p-slate-700);
+        width: 2px;
+    }
+}
+
+.content-form {
+    height: 70%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    display: flex;
+
+    .justify-end {
+        background-color: aqua;
+    }
+}
+
+.text-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--p-dialog-title-font-weight);
+    font-size: var(--p-dialog-title-font-size);
+
+}
+
+.content-input {
+    width: 100%;
+}
+
+.content-button {
+    gap: 20px;
+    height: 22%;
+    display: flex;
+    align-items: end;
+    justify-content: flex-end;
+}
+
+.content-button-more-margin {
+    margin-top: 20%;
+    gap: 20px;
+    height: 22%;
+    display: flex;
+    align-items: end;
+    justify-content: flex-end;
+}
+
+.display-flex {
+    display: block;
+}
+
+.input-row {
+    width: 80%;
+}
+
+.label-input {
+    font-weight: 600;
+    color: var(--p-slate-700);
+}
+
+.alinha-se-possui-flex {
+    justify-content: center;
+    align-items: center;
+}
+
+textarea {
+    width: 100%;
+    background-color: var(--p-slate-50);
+    border-radius: 6px;
+}
+
+.card-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 77%
+}

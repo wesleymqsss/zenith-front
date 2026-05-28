@@ -1,0 +1,197 @@
+<app-header></app-header>
+<div class="cont-pai-panel">
+  <div class="rigth-home">
+    <div class="carrousel-cont">
+      <div class="mr-13 flex justify-end items-center mt-0 font-semibold text-xl text-purple-50 gap-2">
+        <span>Missões recentes</span>
+        <p-button icon="pi pi-plus" aria-label="Save" (click)="dialogCreateMissao()" />
+      </div>
+      <p-carousel [value]="missoes" [numVisible]="2" [numScroll]="1" [circular]="true"
+        [responsiveOptions]="responsiveOptions" [autoplayInterval]="3000">
+        <ng-template pTemplate="item" let-item>
+          <div class="border border-purple-200 dark:border-purple-700 rounded m-2 p-4 bg-slate-100">
+            <div class="mb-3">
+              <div class="relative mx-auto">
+                <p-tag [value]="item.status" [severity]="getSeverity(item.status)" class="absolute dark:!bg-purple-800"
+                  [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+              </div>
+            </div>
+            <div class="info-card mt-10">
+              <div class="mt-4 font-medium">{{ item.titulo }}</div>
+              <div class="mt-4 font-medium">localizacao:
+                <span class="font-span-card">
+                  {{ item.localizacao }}
+
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Data criação:
+                <span class="font-span-card">
+                  {{ item.dataCriacao | date: 'dd/mm/yyyy'}}
+
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Recompensa:
+                <span class="font-span-card">
+                  {{ item.recompensa }}
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Tipo de missão:
+                <span class="font-span-card">
+                  {{ item.tipoMissao }}
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Classe preferida:
+                <span class="font-span-card">
+                  {{ item.classePreferida }}
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Descrição:
+                <span class="font-span-card">
+                  {{ item.descricao }}
+                </span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center">
+              <div class="mt-0 font-semibold text-xl text-purple-800">{{ 'Nível mínimo: ' + item.nivelMinimo }}</div>
+              <span *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro' ">
+                <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
+                  (click)="dialogConfirm(item.id)" />
+              </span>
+              <span *ngIf="usuarioLogado.tipoUsuario === 'Criador'">
+                <p-button label="Editar" icon="pi pi-pen-to-square" styleClass="ml-2"
+                  (click)="dialogCreateMissao(item.id)" />
+              </span>
+              <span *ngIf="usuarioLogado.usuarioId === item.idCriador ">
+                <p-button label="Excluir" icon="pi pi-trash" styleClass="ml-2" severity="danger"
+                  (click)="deletarMissaoId(item.id)" />
+              </span>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </div>
+  <div class="letf-home">
+    <div class="conteudo-left">
+      <div class="img-home-1">
+        <div class="text-image-1" *ngIf="usuarioLogado">
+          Olá, {{usuarioLogado.tipoUsuario}} {{usuarioLogado.nome}}! Aceite novas missões, não perca a oportunidade de
+          se divertir com seu grupo.
+        </div>
+        <div class="text-image-1" *ngIf="false">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card flex justify-center">
+  <p-dialog header="Modal de confirmação" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <span class="p-text-secondary block mb-8">Tem certeza que deseja aceitar a missão?</span>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" (click)="visible = false" />
+      <p-button label="Confirmar" (click)="aceitarMissao(idMissao)" />
+    </div>
+  </p-dialog>
+</div>
+
+<div class="card flex justify-center">
+  <p-dialog header="Modal Criar Missões" [modal]="true" [(visible)]="visibleModalCreateMissao"
+    [style]="{ width: '50rem'}">
+    <div class="flex justify-end gap-2 flex-col">
+      <form [formGroup]="formMissao" class="h-full flex flex-col justify-between">
+        <div>
+          <div class="input-row">
+            <label for="nome" class="label-input">Título:</label>
+            <div class="flex items-center gap-4 mb-4 content-input">
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-envelope"></i>
+                </p-inputgroup-addon>
+                <input pInputText formControlName="titulo" class="flex-auto" />
+              </p-inputgroup>
+            </div>
+          </div>
+          <div class="input-row">
+            <label for="email" class="label-input">Localização:</label>
+            <div class="flex items-center gap-4 mb-4 content-input">
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-envelope"></i>
+                </p-inputgroup-addon>
+                <input pInputText formControlName="localizacao" class="flex-auto" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="input-row" *ngIf="editMode">
+            <label for="email" class="label-input">Status:</label>
+            <div class="flex items-center gap-4  content-input" style="padding-bottom: 6px;">
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-verified"></i>
+                </p-inputgroup-addon>
+                <input pInputText formControlName="status" class="flex-auto" autocomplete="off" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="flex justify-between">
+            <div class="w-50">
+              <label for="estado" class="label-input">Classe: </label>
+              <div class="flex items-center gap-4 mb-4 content-input">
+                <p-select [options]="classes" formControlName="classePreferida" placeholder="Selecionar sua classe"
+                  optionLabel="name" optionValue="code" class="w-full md:w-56" />
+              </div>
+            </div>
+            <div class="w-45">
+              <label for="estado" class="label-input">Tipo de Missão: </label>
+              <div class="flex items-center gap-4 mb-4 content-input">
+                <p-select [options]="tipoMissao" formControlName="tipoMissao" placeholder="Selecione o tipo"
+                  optionLabel="name" optionValue="code" class="w-full md:w-56" />
+              </div>
+            </div>
+            <div class="w-30">
+              <label for="email" class="label-input">Nível Mínimo:</label>
+              <div class="flex items-center gap-4  content-input" style="padding-bottom: 6px;">
+                <p-inputgroup>
+                  <p-inputgroup-addon>
+                    <i class="pi pi-verified"></i>
+                  </p-inputgroup-addon>
+                  <input pInputText formControlName="nivelMinimo" type="number" class="flex-auto" autocomplete="off" />
+                </p-inputgroup>
+              </div>
+            </div>
+            <div class="w-30">
+              <label for="senha" class="label-input">Recompensa: </label>
+              <div class="flex items-center gap-4  content-input">
+                <p-inputgroup>
+                  <p-inputgroup-addon>
+                    <i class="pi pi-key"></i>
+                  </p-inputgroup-addon>
+                  <input pInputText formControlName="recompensa" id="senha" type="number" class="flex-auto"
+                    autocomplete="new-password" />
+                </p-inputgroup>
+              </div>
+            </div>
+          </div>
+          <div class="input-row">
+            <label for="email" class="label-input">Descrição:</label>
+            <div class="flex items-center gap-4  content-input" style="padding-bottom: 6px;">
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-verified"></i>
+                </p-inputgroup-addon>
+                <input pInputText formControlName="descricao" class="flex-auto" autocomplete="off" />
+              </p-inputgroup>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class=" w-full flex gap-5  justify-end">
+        <p-button label="Cancelar" severity="secondary" (click)="visibleModalCreateMissao = false" />
+        <p-button label="Salvar" (click)="criarMissao()" />
+      </div>
+    </div>
+  </p-dialog>
+</div>

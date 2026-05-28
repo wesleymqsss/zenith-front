@@ -1,0 +1,171 @@
+<p-toast></p-toast>
+<div class="card flex justify-center">
+    <div pFocusTrap class="w-full sm:w-100 flex flex-col gap-6 content">
+        <div class="header-login">
+            <p></p>
+        </div>
+        <div class="input-component">
+            <p-iconfield>
+                <p-inputicon>
+                    <i class="pi pi-user"></i>
+                </p-inputicon>
+                <input type="text" pInputText id="input" [(ngModel)]="email" type="text" placeholder="Seu Email"
+                    [pAutoFocus]="true" [fluid]="true" />
+            </p-iconfield>
+
+            <p-iconfield>
+                <p-inputicon>
+                    <i class="pi pi-eye"> </i>
+                </p-inputicon>
+                <input type="text" pInputText id="email" [(ngModel)]="password" type="password" placeholder="Sua Senha"
+                    [fluid]="true" />
+            </p-iconfield>
+
+            <div class="flex items-center gap-2">
+                <p-checkbox id="accept" [(ngModel)]="accept" name="accept" value="Accept" />
+                <label for="accept" class="label-input">Eu declaro que li e concordo com os termos de uso.</label>
+            </div>
+
+        </div>
+
+        <div class="button-component">
+            <p-button label="Realizar login" class="mt-5 width" styleClass="w-full" [loading]="loading"
+                (click)="load()" />
+
+            <p-button label="Realizar cadastro" severity="secondary" class="mt-5 width" styleClass="w-full"
+                [loading]="loading" (click)="openModal()" />
+        </div>
+
+    </div>
+</div>
+
+<p-dialog [modal]="true" [breakpoints]="{ '600px': '75vw', '475px': '90vw' }" [(visible)]="visibleEditProfile"
+    [style]="{ width: '65rem', height: '70rem'}">
+
+    <span class="text-header" autocomplete="username"></span>
+    <form [formGroup]="formUser" class="h-full flex flex-col justify-between">
+        <div>
+            <div class="input-row">
+                <label for="nome" class="label-input">Nome do usuário:</label>
+                <div class="flex items-center gap-4 mb-4 content-input">
+                    <p-inputgroup>
+                        <p-inputgroup-addon>
+                            <i class="pi pi-envelope"></i>
+                        </p-inputgroup-addon>
+                        <input pInputText formControlName="nome" class="flex-auto" />
+                    </p-inputgroup>
+                </div>
+            </div>
+            <div class="input-row">
+                <label for="email" class="label-input">Email:</label>
+                <div class="flex items-center gap-4 mb-4 content-input">
+                    <p-inputgroup>
+                        <p-inputgroup-addon>
+                            <i class="pi pi-envelope"></i>
+                        </p-inputgroup-addon>
+                        <input pInputText formControlName="email" id="email" type="email" class="flex-auto" />
+                    </p-inputgroup>
+                </div>
+            </div>
+            
+            <div class="input-row">
+                <label for="senha" class="label-input">Senha: </label>
+                <div class="flex items-center gap-4  content-input">
+                    <p-inputgroup>
+                        <p-inputgroup-addon>
+                            <i class="pi pi-key"></i>
+                        </p-inputgroup-addon>
+                        <input pInputText formControlName="senha" id="senha" type="password" class="flex-auto"
+                            autocomplete="new-password" />
+                    </p-inputgroup>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <label for="email" class="label-input">Confirmação de senha:</label>
+                <div class="flex items-center gap-4  content-input" style="padding-bottom: 6px;">
+                    <p-inputgroup>
+                        <p-inputgroup-addon>
+                            <i class="pi pi-verified"></i>
+                        </p-inputgroup-addon>
+                        <input pInputText formControlName="confirmPassword" type="password" id="confirmPassword"
+                            class="flex-auto" autocomplete="off" />
+                    </p-inputgroup>
+                </div>
+                <p-message
+                    *ngIf="formUser.get('confirmPassword')?.errors?.['senhasDiferentes'] && formUser.get('confirmPassword')?.touched"
+                    severity="error" icon="pi pi-times-circle" styleClass="mb-2">As senhas devem ser
+                    iguais.</p-message>
+
+            </div>
+
+            <div class="flex ">
+                <div class="input-row">
+                    <label for="estado" class="label-input">Tipo jogador: </label>
+                    <div class="flex items-center gap-4 mb-4 content-input">
+                        <p-select [options]="tipoJogador" formControlName="tipoUsuario"
+                            placeholder="Selecionar seu estilo de jogador" optionLabel="name" optionValue="code"
+                            class="w-full md:w-56" />
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <label for="estado" class="label-input">Classe: </label>
+                    <div class="flex items-center gap-4 mb-4 content-input">
+                        <p-select [options]="classes" formControlName="classe" placeholder="Selecionar sua classe"
+                            optionLabel="name" optionValue="code" class="w-full md:w-56" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="informacoes-perfil">
+            <span class="label-input text-2xl">Sobre os Perfis</span>
+            <div class="flex justify-center">
+                <div class=" p-8 flex items-center justify-center">
+                    <p-card [style]="{ width: '20rem', overflow: 'hidden' }">
+                        <ng-template #header>
+
+                            <div class="img1 w-full h-50">
+                            </div>
+
+                        </ng-template>
+                        <ng-template #title> Aventureiro</ng-template>
+                        <p class="texto">
+                            Seja um Aventureiro e mergulhe na linha de frente da ação. Este perfil é para quem executa
+                            as missões, explora o desconhecido e busca glória. Especialize-se em uma das classes — seja
+                            a magia de um Mago, a fé de um Clérigo, a força de um Fighter, a astúcia de um Artificer, a
+                            harmonia de um Druida, a devoção de um Paladino ou a inspiração de um Bardo — e comece sua
+                            jornada.
+                        </p>
+                    </p-card>
+                </div>
+                <div class="p-8 flex items-center justify-center ">
+                    <p-card [style]="{ width: '20rem', overflow: 'hidden' }">
+                        <ng-template #header>
+
+                            <div class="img2 w-full h-50">
+                            </div>
+
+                        </ng-template>
+                        <ng-template #title> Criador </ng-template>
+                        <p class="texto">
+                            Assuma o papel de Criador e torne-se o arquiteto das aventuras. Você será responsável por
+                            elaborar missões desafiadoras, coordenar os grupos de aventureiros e gerenciar as
+                            recompensas. Sua criatividade e equilíbrio definem o valor de cada jornada, estabelecendo
+                            quanto cada missão valerá na moeda do jogo.
+                        </p>
+                    </p-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-2 content-button-more-margin pb-3">
+            <p-button label="Cancelar" severity="secondary" (click)="closeModal()" />
+            <p-button label="Criar jogador" (click)="submitUser()" />
+        </div>
+
+    </form>
+
+</p-dialog>
