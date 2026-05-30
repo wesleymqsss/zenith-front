@@ -5,7 +5,7 @@
         <app-card-reputacao [dados]="reputacaoData"></app-card-reputacao>
       </div>
     <div class="carrousel-cont">
-      <div class="mr-13 flex justify-end items-center mt-0 font-semibold text-xl text-purple-50 gap-2">
+      <div class="mr-13 flex justify-end items-center mt-0 font-semibold text-xl text-purple-50 gap-2" *ngIf="usuarioLogado.tipoUsuario === 'Criador'">
         <span>Missões recentes</span>
         <p-button icon="pi pi-plus" aria-label="Save" (click)="dialogCreateMissao()" />
       </div>
