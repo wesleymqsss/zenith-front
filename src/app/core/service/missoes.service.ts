@@ -6,6 +6,7 @@ import {
   CriarMissaoPayload,
   HistoricoMissao,
   MissaoResponse,
+  CancelarMissaoPayload,
 } from '../interface/missoes';
 import { MessageResponse } from '../interface/messageResponse';
 import { ApiResponsePagina } from '../interface/respostaPaginada';
@@ -36,19 +37,13 @@ export class MissoesService {
   }
   
   concluirMissao(id: number): Observable<MessageResponse> {
-    const payload = {
-      status: "Concluída",
-    }
-
-    return this._http.post<MessageResponse>(`${this.url}${id}/aceitar`, payload);
+    const url = `${environment.api_url}missoesaceitas/${id}/concluir`;
+    return this._http.put<MessageResponse>(url, {});
   }
 
-  cancelarMissao(id: number): Observable<MessageResponse> {
-    const payload = {
-      status: "Cancelada",
-    }
-
-    return this._http.post<MessageResponse>(`${this.url}${id}/aceitar`, payload);
+  cancelarMissao(id: number, payload: CancelarMissaoPayload): Observable<MessageResponse> {
+    const url = `${environment.api_url}missoesaceitas/${id}/cancelar`;
+    return this._http.put<MessageResponse>(url, payload);
   }
 
   historicoMissoes(

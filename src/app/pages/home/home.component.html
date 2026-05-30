@@ -1,6 +1,9 @@
 <app-header></app-header>
 <div class="cont-pai-panel">
   <div class="rigth-home">
+     <div style="    width: 100%; padding: 50px; padding-top: 0px; padding-bottom: 0px;" *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro'">
+        <app-card-reputacao [dados]="reputacaoData"></app-card-reputacao>
+      </div>
     <div class="carrousel-cont">
       <div class="mr-13 flex justify-end items-center mt-0 font-semibold text-xl text-purple-50 gap-2">
         <span>Missões recentes</span>
@@ -53,10 +56,17 @@
             </div>
             <div class="flex justify-between items-center">
               <div class="mt-0 font-semibold text-xl text-purple-800">{{ 'Nível mínimo: ' + item.nivelMinimo }}</div>
+              
               <span *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro' ">
-                <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
-                  (click)="dialogConfirm(item.id)" />
+                <ng-container *ngIf="reputacaoData.bloqueioDias === 0; else blockedHome">
+                  <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
+                    (click)="dialogConfirm(item.id)" />
+                </ng-container>
+                <ng-template #blockedHome>
+                  <p-message severity="error" [text]="'Bloqueado por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>
+                </ng-template>
               </span>
+
               <span *ngIf="usuarioLogado.tipoUsuario === 'Criador'">
                 <p-button label="Editar" icon="pi pi-pen-to-square" styleClass="ml-2"
                   (click)="dialogCreateMissao(item.id)" />
@@ -84,7 +94,6 @@
     </div>
   </div>
 </div>
-
 <div class="card flex justify-center">
   <p-dialog header="Modal de confirmação" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
     <span class="p-text-secondary block mb-8">Tem certeza que deseja aceitar a missão?</span>

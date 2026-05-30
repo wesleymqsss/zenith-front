@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TextareaModule } from 'primeng/textarea';
 import { IconField, IconFieldModule } from 'primeng/iconfield';
 import { InputIcon, InputIconModule } from 'primeng/inputicon';
 import { AutoFocusModule } from 'primeng/autofocus';
@@ -36,12 +37,14 @@ import { ToastModule } from 'primeng/toast';
 import { DataView } from 'primeng/dataview';
 import { Rating } from 'primeng/rating';
 import { SelectButton } from 'primeng/selectbutton';
+import { DividerModule } from 'primeng/divider';
 @NgModule({
   imports: [
     FocusTrapModule,
     ButtonModule,
     FormsModule,
     InputTextModule,
+    TextareaModule,
     CheckboxModule,
     IconFieldModule,
     InputIconModule,
@@ -79,13 +82,15 @@ import { SelectButton } from 'primeng/selectbutton';
     ToastModule,
     DataView,
     Rating,
-    SelectButton
+    SelectButton,
+    DividerModule
   ],
   exports: [
     FocusTrapModule,
     ButtonModule,
     FormsModule,
     InputTextModule,
+    TextareaModule,
     CheckboxModule,
     IconFieldModule,
     InputIconModule,
@@ -123,7 +128,8 @@ import { SelectButton } from 'primeng/selectbutton';
     Tag,
     DataView,
     Rating,
-    SelectButton
+    SelectButton,
+    DividerModule
   ]
 })
 export class MaterialModule { }

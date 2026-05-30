@@ -6,6 +6,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { AccordionModule } from 'primeng/accordion';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../../core/material/material.module';
 
 @NgModule({
     declarations: [MissoesCriadosComponent],
@@ -15,7 +17,9 @@ import { AccordionModule } from 'primeng/accordion';
         SharedModule,
         CardModule,
         ButtonModule,
-        AccordionModule
+        AccordionModule,
+        FormsModule, ReactiveFormsModule,
+        MaterialModule
     ],
     exports: [MissoesCriadosComponent]
 })

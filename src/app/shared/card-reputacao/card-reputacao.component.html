@@ -1,0 +1,62 @@
+<p-card styleClass="shadow-2 border-round-xl overflow-hidden">
+    <div style="display:flex; flex-direction: column; gap: 4px; padding: 2px;">
+        <div class="flex align-items-center justify-content-between, "
+            style="display: flex; align-items: center; justify-content: space-between;">
+            <div class="flex align-items-center gap-2">
+                <i class="pi pi-shield text-primary-500 text-2xl"></i>
+                <span class="font-bold text-xl text-900">Status do Aventureiro</span>
+            </div>
+            <p-tag [value]="getReputacaoStatus()"
+                [severity]="dados.reputacao >= 70 ? 'success' : (dados.reputacao >= 40 ? 'warning' : 'danger')"></p-tag>
+        </div>
+
+        <div class="flex flex-column gap-2" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="flex justify-content-between align-items-end gap-2"
+                style="display: flex; align-items: center; gap: 8px;">
+                <span class="text-700 font-medium">Reputação</span>
+                <span class="text-primary-600 font-bold text-2xl">{{ dados.reputacao }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 border-round-pill h-1rem overflow-hidden gap-2"
+                style="background-color: #e5e7eb; border-radius: 9999px; height: 16px; overflow: hidden; position: relative; width: 100%;">
+                <div class="h-full transition-all transition-duration-500 border-round-pill"
+                    [style.width.%]="dados.reputacao" [style.background-color]="getProgressBarColor()">
+                </div>
+            </div>
+            <small class="text-500">Mantenha sua reputação alta para melhores missões.</small>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="flex align-items-center justify-content-between bg-red-50 p-3 border-round-lg"
+            style="display: flex; align-items: center;justify-content: space-between;padding: 3px; border-radius: 8px;"
+            *ngIf="dados.bloqueioDias > 0">
+            <div class="flex align-items-center gap-3"
+                style="display: flex; align-items: center; gap: 12px; padding: 3px;">
+                <div class="bg-red-500 text-white border-circle w-3rem h-3rem flex align-items-center justify-center shadow-2"
+                    style="border-radius: 50%;height: 30px;width: 30px;display: flex;justify-content: center;align-items: center;">
+                    <i style="margin-bottom: 3px;" class="pi pi-lock text-xl"></i>
+                </div>
+                <div class="flex flex-column" style="display: flex; flex-direction: column; gap: 4px;">
+                    <span class="text-red-700 font-bold">Bloqueio Ativo</span>
+                    <small class="text-red-500">Restrição de novas missões</small>
+                </div>
+            </div>
+            <div class="text-center">
+                <span class="block text-2xl font-bold text-red-700">{{ dados.bloqueioDias }}</span>
+                <span class="text-xs font-medium text-red-600 uppercase">Dias</span>
+            </div>
+        </div>
+
+        <div class="flex align-items-center gap-3 bg-green-50 p-3 border-round-lg"
+            style="display: flex; align-items: center; gap: 12px; padding: 3px;" *ngIf="dados.bloqueioDias === 0">
+            <div style="border-radius: 50%;height: 30px;width: 30px;display: flex;justify-content: center;align-items: center;"
+                class="bg-green-500 text-white border-circle w-3rem h-3rem flex align-items-center justify-center shadow-2">
+                <i class="pi pi-check-circle text-xl"></i>
+            </div>
+            <div class="flex flex-column" style="display: flex; flex-direction: column; gap: 4px;">
+                <span class="text-green-700 font-bold">Conta Regular</span>
+                <small class="text-green-500">Você está apto para novas aventuras!</small>
+            </div>
+        </div>
+    </div>
+</p-card>

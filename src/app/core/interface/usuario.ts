@@ -26,3 +26,9 @@ export interface Usuario {
   reputacao: number;
   dataCadastro: string; 
 }
+
+export interface ReputacaoResponse {
+  usuarioId: number;
+  reputacao: number;
+  bloqueioDias: number;
+}

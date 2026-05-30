@@ -1,10 +1,12 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MissaoResponse } from '../../core/interface/missoes';
+import { Logged } from '../../core/interface/userLogin';
 import { LoginService } from '../../core/service/login.service';
 import { MissoesService } from '../../core/service/missoes.service';
-import { Logged } from '../../core/interface/userLogin';
-import { MissaoResponse } from '../../core/interface/missoes';
-import { HttpErrorResponse } from '@angular/common/http';
 import { SnackbarService } from '../../core/service/snackbar.service';
+import { ReputacaoResponse } from '../../core/interface/usuario';
 
 @Component({
   selector: 'app-missoes-criados',
@@ -13,28 +15,43 @@ import { SnackbarService } from '../../core/service/snackbar.service';
   styleUrl: './missoes-criados.component.scss'
 })
 export class MissoesCriadosComponent {
+  formCancelarMissao!: FormGroup;
   usuarioLogado!: Logged;
   layout: 'list' | 'grid' = 'grid';
   options = ['list', 'grid'];
   minhasMissoesResponse: MissaoResponse[] = [];
   missoesFiltradas: MissaoResponse[] = [];
   statusDisponiveis: string[] = ['Disponível', 'Em andamento', 'Concluída', 'Cancelada'];
+  visibleModalCreateMissao: boolean = false;
+  idMissao!: number;
+  reputacaoData: ReputacaoResponse = {
+    usuarioId: 0,
+    reputacao: 0,
+    bloqueioDias: 0,
+  };
 
   constructor(
     private readonly _loginService: LoginService,
     private readonly _missoesService: MissoesService,
     private readonly _snackbarService: SnackbarService,
-
+    private readonly _fb: FormBuilder,
   ) { }
 
   ngOnInit() {
     this._loginService.currentUser$.subscribe((user) => {
       if (user) {
         this.usuarioLogado = user;
+        this.getReputacao(user.usuarioId);
       }
     });
 
     this.getMissoesPorUsuario();
+
+    this.formCancelarMissao = this._fb.group({
+      motivo: [""],
+      reputacaoPerdida: [null],
+      bloqueioDias: [null],
+    });
   }
 
   getMissoesPorUsuario() {
@@ -55,6 +72,17 @@ export class MissoesCriadosComponent {
 
   limparFiltro() {
     this.missoesFiltradas = this.minhasMissoesResponse;
+  }
+
+  getReputacao(id: number) {
+    this._loginService.getReputacao(id).subscribe({
+      next: (data) => {
+        this.reputacaoData = data;
+      },
+      error: (err) => {
+        console.error('Erro ao buscar reputação:', err);
+      },
+    });
   }
 
   getSeverityByStatus(status: string): string {
@@ -79,24 +107,27 @@ export class MissoesCriadosComponent {
   concluirMissao(id: number) {
     this._missoesService.concluirMissao(id).subscribe({
       next: () => {
-        const missao = this.minhasMissoesResponse.find(m => m.id === id);
-        if (missao) {
-          missao.status = 'Concluída';
-        }
         this._snackbarService.showSuccess('Missão concluída com sucesso!');
+        this.getReputacao(this.usuarioLogado.usuarioId);
+        this.getMissoesPorUsuario();
       },
-      error: (err) => this._snackbarService.showSuccess('Erro ao concluir missão.')
+      error: (err) => this._snackbarService.showError('Erro ao concluir missão.')
     });
   }
 
-  cancelarMissao(id: number) {
-    this._missoesService.cancelarMissao(id).subscribe({
+  cancelarMissao() {
+    const payload = {
+      motivo: this.formCancelarMissao.value.motivo,
+      reputacaoPerdida: this.formCancelarMissao.value.reputacaoPerdida,
+      bloqueioDias: this.formCancelarMissao.value.bloqueioDias,
+    };
+
+    this._missoesService.cancelarMissao(this.idMissao, payload).subscribe({
       next: () => {
-        const missao = this.minhasMissoesResponse.find(m => m.id === id);
-        if (missao) {
-          missao.status = 'Cancelada';
-        }
         this._snackbarService.showSuccess('Missão cancelada com sucesso!');
+        this.getMissoesPorUsuario();
+        this.visibleModalCreateMissao = false;
+        this.formCancelarMissao.reset();
       },
       error: (err) => this._snackbarService.showError('Erro ao cancelar missão.')
     });
@@ -111,6 +142,16 @@ export class MissoesCriadosComponent {
       error: (err: HttpErrorResponse) => {
         this._snackbarService.showError(err.message);
       },
+    });
+  }
+
+  abrirDialogCancelarMissao(ID: number) {
+    this.visibleModalCreateMissao = true;
+    this.idMissao = ID;
+    this.formCancelarMissao.patchValue({
+      motivo: "",
+      reputacaoPerdida: Math.floor(Math.random() * 10) + 1,
+      bloqueioDias: Math.floor(Math.random() * 5) + 1,
     });
   }
 }

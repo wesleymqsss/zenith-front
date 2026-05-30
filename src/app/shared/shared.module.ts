@@ -13,6 +13,7 @@ import { Grafico2Component } from "./grafico-2/grafico-2.component";
 import { Grafico1Component } from "./grafico-1/grafico-1.component";
 import { DataNotFoundComponent } from './data-not-found/data-not-found.component';
 import { TagModule } from "primeng/tag";
+import { CardReputacaoComponent } from './card-reputacao/card-reputacao.component';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { TagModule } from "primeng/tag";
         CardDashboardComponent,
         Grafico2Component,
         Grafico1Component,
-        DataNotFoundComponent
+        DataNotFoundComponent,
+        CardReputacaoComponent
     ],
     imports: [
         CommonModule,
@@ -44,6 +46,7 @@ import { TagModule } from "primeng/tag";
         Grafico2Component,
         Grafico1Component,
         DataNotFoundComponent,
+        CardReputacaoComponent,
         TagModule
     ]
 })

@@ -66,6 +66,9 @@
                         <input pInputText formControlName="email" id="email" type="email" class="flex-auto" />
                     </p-inputgroup>
                 </div>
+                <p-message
+                    *ngIf="formUser.get('email')?.errors?.['email'] && formUser.get('email')?.touched"
+                    severity="error" icon="pi pi-times-circle" styleClass="mb-2">Por favor, insira um e-mail válido.</p-message>
             </div>
             
             <div class="input-row">

@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environments';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Logged, Login, UserLogin } from '../interface/userLogin'; 
+import { ReputacaoResponse } from '../interface/usuario';
 
 const USER_STORAGE_KEY = 'currentUserAppDoAmor'; 
 
@@ -96,5 +97,9 @@ export class LoginService {
 
   updatePassword(user: any): Observable<any> {
     return this.http.put<any>(`${this.url}/alterar-senha`, user);
+  }
+
+  getReputacao(id: number): Observable<ReputacaoResponse> {
+    return this.http.post<ReputacaoResponse>(`http://localhost:5068/api/Reputacao/${id}/recalcular`, null);
   }
 }

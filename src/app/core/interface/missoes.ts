@@ -22,6 +22,12 @@ export interface CriarMissaoPayload {
   classePreferida: string;
 }
 
+export interface CancelarMissaoPayload {
+  motivo: string;
+  reputacaoPerdida: number;
+  bloqueioDias: number;
+}
+
 export interface HistoricoMissao {
   idHistorico: number;
   idMissaoAceita: number;

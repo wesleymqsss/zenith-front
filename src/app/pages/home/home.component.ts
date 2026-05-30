@@ -6,6 +6,7 @@ import { MissoesService } from '../../core/service/missoes.service';
 import { SnackbarService } from '../../core/service/snackbar.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReputacaoResponse } from '../../core/interface/usuario';
 
 interface IselectCodeString {
   name: string;
@@ -30,6 +31,12 @@ export class HomeComponent {
   tipoMissao: IselectCodeString[] | undefined;
   editMode: boolean = false;
   nomeBotao: string = '';
+  reputacaoData: ReputacaoResponse = {
+    usuarioId: 0,
+    reputacao: 0,
+    bloqueioDias: 0,
+  };
+
   constructor(
     private readonly _loginService: LoginService,
     private readonly _missoesService: MissoesService,
@@ -41,6 +48,7 @@ export class HomeComponent {
     this._loginService.currentUser$.subscribe((user) => {
       if (user) {
         this.usuarioLogado = user;
+        this.getReputacao(user.usuarioId);
       }
     });
 
@@ -101,6 +109,17 @@ export class HomeComponent {
       dataCriacao: [''],
       idCriador: [null],
       status: [''],
+    });
+  }
+
+  getReputacao(id: number) {
+    this._loginService.getReputacao(id).subscribe({
+      next: (data) => {
+        this.reputacaoData = data;
+      },
+      error: (err) => {
+        console.error('Erro ao buscar reputação:', err);
+      },
     });
   }
 
