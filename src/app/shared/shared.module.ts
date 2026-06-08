@@ -15,6 +15,7 @@ import { DataNotFoundComponent } from './data-not-found/data-not-found.component
 import { TagModule } from "primeng/tag";
 import { CardReputacaoComponent } from './card-reputacao/card-reputacao.component';
 import { CarrosselMinhasAvaliacoesComponent } from './carrossel-minhas-avaliacoes/carrossel-minhas-avaliacoes.component';
+import { ListaEventureiroComponent } from './lista-eventureiro/lista-eventureiro.component';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import { CarrosselMinhasAvaliacoesComponent } from './carrossel-minhas-avaliacoe
         Grafico1Component,
         DataNotFoundComponent,
         CardReputacaoComponent,
-        CarrosselMinhasAvaliacoesComponent
+        CarrosselMinhasAvaliacoesComponent,
+        ListaEventureiroComponent
     ],
     imports: [
         CommonModule,
@@ -50,7 +52,8 @@ import { CarrosselMinhasAvaliacoesComponent } from './carrossel-minhas-avaliacoe
         DataNotFoundComponent,
         CardReputacaoComponent,
         TagModule,
-        CarrosselMinhasAvaliacoesComponent
+        CarrosselMinhasAvaliacoesComponent,
+        ListaEventureiroComponent
     ]
 })
 export class SharedModule { }

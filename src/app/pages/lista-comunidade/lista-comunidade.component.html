@@ -1,9 +1,9 @@
 <app-header></app-header>
-<div class="content">
+<div class="content" style="margin-top: 20px;">
     <div class="card">
-        <p-table [value]="dataSource" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
-            [rowsPerPageOptions]="[5, 10, 20]">
-            <ng-template #header>
+        <p-table [value]="dataSource" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }"
+            [rowsPerPageOptions]="[10, 20]">
+            <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="nome"
                         style="width:15% ; background-color: var(--p-breadcrumb-item-color) !important; color: #fff;">
@@ -31,7 +31,7 @@
                         <p-sortIcon field="tipoUsuario" />
                     </th>
                     <th pSortableColumn="reputacao"
-                        style="width:10%; background-color: var(--p-breadcrumb-item-color) !important; color: #fff;">
+                        style="width:10%; background-color: var(--p-breadcrumb-item-color) !important; color: #fff; white-space: nowrap;">
                         Reputação
                         <p-sortIcon field="reputacao" />
                     </th>
@@ -50,5 +50,8 @@
             </ng-template>
 
         </p-table>
+    </div>
+    <div class="card-rigth">
+       <app-lista-eventureiro [dataSource]="dataSourceAventureiro"></app-lista-eventureiro>
     </div>
 </div>

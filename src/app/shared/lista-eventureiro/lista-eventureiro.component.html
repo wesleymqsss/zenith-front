@@ -1,0 +1,46 @@
+<div class="card flex justify-content-center" style="width: 100%; flex-direction: column; align-items: center; background-color: var(--p-surface-50); border-radius: 8px; padding: 1rem;">
+   <p>Montar Grupo</p>
+   <p-orderlist [value]="dataSource" filterBy="nome" filterPlaceholder="Filtrar por nome" dataKey="id"
+        [responsive]="true" scrollHeight="34rem" [header]="'Aventureiros'" [styleClass]="'hide-paginator'">
+        <ng-template let-item pTemplate="item">
+            <div class="flex flex-wrap p-2 align-items-center gap-3 w-full" style="border-bottom: 1px solid #a21caf;">
+                <div class="flex align-items-center justify-content-center border-round bg-primary text-white font-bold"
+                    style="width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <span>
+                        {{ item.nome.substring(0, 1).toUpperCase() }}
+                    </span>
+                    
+                </div>
+
+                <div class="flex-1 flex flex-column gap-1">
+                    <span class="font-bold text-sm">{{ item.nome }}</span>
+                </div>
+
+                <div class="flex align-items-center gap-2">
+                    <div
+                        class="flex align-items-center gap-1 bg-surface-100 dark:bg-surface-800 px-2 py-1 border-round shadow-1">
+                        <i class="pi pi-star-fill text-yellow-500" style="font-size: 0.8rem;"></i>
+                        <span class="text-xs font-bold">LVL {{ item.nivel }}</span>
+                    </div>
+                    <div class="flex align-items-center">
+                        <span [style.background-color]="getClassTheme(item.classe).color"
+                            class="px-2 py-0 border-round text-white font-bold text-xs flex  gap-1 shadow-1" 
+                            style="border: 1px solid rgba(255,255,255,0.2); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); border-radius: 4px; align-items: center;">
+                            <i [class]="getClassTheme(item.classe).icon" style="font-size: 0.7rem;"></i>
+                            {{ getClassTheme(item.classe).label }}
+                        </span>
+                    </div>
+                    <div class="flex gap-1" style="align-items: center;">
+                        <i class="pi pi-shield text-primary" style="font-size: 0.8rem;"></i>
+                        <span class="font-bold text-primary text-sm">{{ item.reputacao }}</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-column align-items-end gap-1">
+                    <p-tag [value]="item.tipoUsuario" [severity]="getSeverity(item.tipoUsuario)"
+                        [style]="{'font-size': '10px'}"></p-tag>
+                </div>
+            </div>
+        </ng-template>
+    </p-orderlist>
+</div>

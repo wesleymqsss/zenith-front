@@ -14,6 +14,8 @@ import { UsuarioService } from '../../core/service/usuario.service';
 export class ListaComunidadeComponent implements OnInit {
   dataSource: Usuario[] = [];
   userLogin!: Logged; 
+  dataSourceAventureiro: Usuario[] = [];
+
   constructor(
     private readonly _loginService: LoginService,
     private readonly _usuarioService: UsuarioService,
@@ -29,9 +31,15 @@ export class ListaComunidadeComponent implements OnInit {
   }
 
  carregarUsuarios(): void {
-  this._usuarioService.getUsers().subscribe((response) => {
-    this.dataSource = response.items;
-    console.log(this.dataSource); 
+  this._usuarioService.getUsers().subscribe((response: any) => {
+    const users = Array.isArray(response) ? response : response.items;
+    
+    this.dataSource = users;
+    
+    this.dataSourceAventureiro = users.filter((user: Usuario) => 
+      user.tipoUsuario === 'Aventureiro' || user.tipoUsuario === 'Aventureiro'
+    );
+    
   });
 }
 
