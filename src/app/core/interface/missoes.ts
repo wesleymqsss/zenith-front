@@ -10,6 +10,7 @@ export interface MissaoResponse {
   idCriador: number;
   status: string;
   dataCriacao: string;
+  idAventureiro: number;
 }
 
 export interface CriarMissaoPayload {

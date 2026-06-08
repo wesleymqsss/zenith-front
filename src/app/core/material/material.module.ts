@@ -39,6 +39,7 @@ import { Rating } from 'primeng/rating';
 import { SelectButton } from 'primeng/selectbutton';
 import { DividerModule } from 'primeng/divider';
 import { RatingModule } from 'primeng/rating';
+import { FieldsetModule } from 'primeng/fieldset';
 @NgModule({
   imports: [
     FocusTrapModule,
@@ -85,7 +86,8 @@ import { RatingModule } from 'primeng/rating';
     Rating,
     SelectButton,
     DividerModule,
-    RatingModule
+    RatingModule,
+    FieldsetModule
   ],
   exports: [
     FocusTrapModule,
@@ -132,7 +134,8 @@ import { RatingModule } from 'primeng/rating';
     Rating,
     SelectButton,
     DividerModule,
-    RatingModule
+    RatingModule,
+    FieldsetModule
   ]
 })
 export class MaterialModule { }

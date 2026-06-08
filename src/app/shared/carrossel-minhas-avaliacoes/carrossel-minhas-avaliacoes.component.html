@@ -1,0 +1,34 @@
+<div class="p-2 bg-white dark:bg-surface-900 shadow-2 border-round-xl" style="width: 400px; height: 100%;">
+    <p-carousel [value]="avaliacoes" [numVisible]="1" [numScroll]="1" [circular]="false"
+        [responsiveOptions]="responsiveOptions" [autoplayInterval]="0">
+        <ng-template pTemplate="item" let-item>
+            <div class="m-2 p-1 border-round bg-surface-50 dark:bg-surface-800 transition-colors duration-200">
+                <div class="flex gap-2" style="flex-direction: column;">
+                    <div class="flex justify-content-between align-items-center border-bottom-1 pb-2">
+                        <span class="text-xs font-semibold text-secondary uppercase tracking-wider">Avaliação</span>
+                        <span class="text-xs text-500 font-medium">
+                            <i class="pi pi-calendar mr-1 text-xs"></i>
+                            {{ item.dataAvaliacao | date: 'dd/MM/yyyy' }}
+                        </span>
+                    </div>
+
+                    <div class="flex flex-column align-items-center py-2 justify-between gap-3">
+                        <div class="flex gap-1">
+                            <i *ngFor="let star of [1,2,3,4,5]" 
+                               [className]="star <= getIntegerRating(item.nota) ? 'pi pi-star-fill text-yellow-500 text-xl' : 'pi pi-star text-300 text-xl'">
+                            </i>
+                        </div>
+                        <span class="text-2xl font-bold text-primary">{{ getIntegerRating(item.nota) }}/5</span>
+                    </div>
+
+                    <div class="bg-white dark:bg-surface-900 p-3 border-round border-1 min-h-6rem flex flex-column align-items-center">
+                        <span class="text-xs font-bold text-600 uppercase">Comentário:</span>
+                        <p class="m-0 text-sm line-height-3 text-700 italic">
+                            "{{ item.justificativa || 'Sem justificativa fornecida.' }}"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-carousel>
+</div>

@@ -60,10 +60,10 @@
               <div class="mt-0 font-semibold text-xl text-purple-800">{{ 'Nível mínimo: ' + item.nivelMinimo }}</div>
 
               <span *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro' ">
-                <ng-container *ngIf="reputacaoData.bloqueioDias === 0; else blockedHome">
+                <!-- <ng-container *ngIf="reputacaoData.bloqueioDias === 0; else blockedHome"> -->
                 <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
                   (click)="dialogConfirm(item.id)" />
-                </ng-container>
+                <!-- </ng-container> -->
                 <ng-template #blockedHome>
                   <p-message severity="error"
                     [text]="'Bloqueado por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>

@@ -9,6 +9,7 @@ import { SnackbarService } from '../../core/service/snackbar.service';
 import { ReputacaoResponse } from '../../core/interface/usuario';
 import { AvaliacaoMissaoService } from '../../core/service/avaliacao-missao.service';
 import { UsuarioService } from '../../core/service/usuario.service';
+import { AvaliacoesResponse } from '../../core/interface/avaliacoesResponse';
 
 @Component({
   selector: 'app-missoes-criados',
@@ -29,6 +30,7 @@ export class MissoesCriadosComponent {
   visibleModalCreateMissao: boolean = false;
   visibleModalAvalicao: boolean = false;
   idMissao!: number;
+  avaliacoesUsuarioLogado: AvaliacoesResponse[] = [];
   reputacaoData: ReputacaoResponse = {
     usuarioId: 0,
     reputacao: 0,
@@ -49,11 +51,11 @@ export class MissoesCriadosComponent {
       if (user) {
         this.usuarioLogado = user;
         this.getReputacao(user.usuarioId);
+        this.getAvaliacoesUsuarioLogado(user.usuarioId);
       }
     });
 
     this.getMissoesPorUsuario();
-
     this.formCancelarMissao = this._fb.group({
       motivo: [""],
       reputacaoPerdida: [null],
@@ -61,7 +63,7 @@ export class MissoesCriadosComponent {
     });
 
     this.formAvaliacao = this._fb.group({
-      idMissaoAceita: [0],
+      idMissao: [0],
       idAvaliado: [0],
       nota: [0],
       justificativa: [""],
@@ -169,10 +171,10 @@ export class MissoesCriadosComponent {
     });
   }
 
-  abrirModalAvaliacao(missaoId: number, nota: any) {
+  abrirModalAvaliacao(missaoId: number, aventureiroId: number, nota: any) {
     this.formAvaliacao.patchValue({
-      idMissaoAceita: missaoId,
-      idAvaliado: this.usuarioLogado.usuarioId,
+      idMissao: missaoId,
+      idAvaliado: aventureiroId,
       nota: nota,
     });
     this.visibleModalAvalicao = true;
@@ -184,6 +186,7 @@ export class MissoesCriadosComponent {
   }
 
   salvarAvaliacao() {
+    console.log('Payload de avaliação:', this.formAvaliacao.value);
     this._avaliacaoMissaoService.avalicaoMissao(this.formAvaliacao.value).subscribe({
       next: () => {
         this._snackbarService.showSuccess('Avaliação registrada com sucesso!');
@@ -213,6 +216,19 @@ export class MissoesCriadosComponent {
           console.error('Erro ao atualizar level:', httpError);
         }
       },
+    });
+  }
+
+  getAvaliacoesUsuarioLogado(idUsuario: number) {
+    this._avaliacaoMissaoService.getAvaliacaoUsuario(idUsuario).subscribe({
+      next: (response) => {
+        this.avaliacoesUsuarioLogado = response;
+        console.log('Avaliações do usuário logado:', response);
+      },
+      error: (err) => {
+        console.error('Erro ao buscar avaliações do usuário logado:', err);
+        this._snackbarService.showError('Erro ao buscar avaliações. Por favor, tente novamente.');
+      }
     });
   }
 }

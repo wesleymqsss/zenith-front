@@ -1,10 +1,10 @@
 <app-header></app-header>
 
 <div class="container mx-auto p-4">
-    <div class="mb-6 flex justify-between" *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro'">
+    <div class="mb-6 flex justify-between " *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro'">
         <app-card-reputacao [dados]="reputacaoData"></app-card-reputacao>
-        <div>
-            <label for="email" class="label-input" style="color: #fff">Alterar level:</label>
+        <div class="m-2 p-1 border-round bg-surface-50 dark:bg-surface-800 transition-colors duration-200 ng-star-inserted" style="width: 20%;  background-color: #fff; padding: 1rem; border-radius: 8px;" class="flex flex-col gap-2">
+            <label for="email" class="text-xs font-semibold text-secondary uppercase tracking-wider" >Alterar level:</label>
             <div class="flex items-center gap-4 mb-4 content-input">
                 <p-inputgroup>
                     <p-inputgroup-addon>
@@ -15,6 +15,7 @@
                 <p-button label="salvar" styleClass="p-button-success" (click)="atualizarLevel()"></p-button>
             </div>
         </div>
+        <app-carrossel-minhas-avaliacoes [avaliacoes]="avaliacoesUsuarioLogado"></app-carrossel-minhas-avaliacoes>
     </div>
 
     <div class="flex flex-wrap gap-2 mb-6 p-4 bg-surface-50 dark:bg-surface-900 shadow-1" style="border-radius: 8px;">
@@ -57,7 +58,7 @@
                         *ngIf="missao.status === 'Concluída' && usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'criador'">
 
                         <div class="card flex justify-center">
-                            <p-rating (onRate)="abrirModalAvaliacao(missao.id, $event.value)" />
+                            <p-rating (onRate)="abrirModalAvaliacao(missao.id,missao.idAventureiro , $event.value)" />
                         </div>
 
                     </ng-container>
@@ -69,12 +70,12 @@
 
                 <ng-container
                     *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro' && missao.status === 'Em andamento'">
-                    <div class="flex gap-2" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated">
+                    <!-- <div class="flex gap-2" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated"> -->
                         <p-button label="Concluir" styleClass="p-button-success"
                             (click)="concluirMissao(missao.id)"></p-button>
                         <p-button label="Cancelar" styleClass="p-button-danger"
                             (click)="abrirDialogCancelarMissao(missao.id)"></p-button>
-                    </div>
+                    <!-- </div> -->
                     <ng-template #blockedCreated>
                         <p-message severity="error"
                             [text]="'Bloqueado de fazer missões por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>
