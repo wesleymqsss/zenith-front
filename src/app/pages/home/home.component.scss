@@ -1,63 +1,47 @@
 .rigth-home {
-    width: 60%;
+    width: 70%;
     height: 100%;
 }
 
-.cont-pai-panel{
-    padding: 2%;
-}
-
-.conteudo-left {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.cont-pai-panel {
+    padding: 8px;
 }
 
 .letf-home {
-    width: 40%;
+    width: 30%;
     height: 100%;
     display: flex;
     justify-content: end;
-    align-items: center;
+}
+
+.conteudo-left {
+    height: 800px;
+    width: 100%;
+    display: flex;
+    justify-content: left;
 }
 
 .img-home-1 {
-    height: 100%;
-    width: 100%;
-    background-image: url('../../../assets/retrato-de-personagem-pirata-em-estilo-de-arte-digital.png');
-    background-size: cover;
+    width: 400px;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    background-image: url('../../../assets/retrato-de-personagem-pirata-em-estilo-de-arte-digital.png');
 }
 
 .text-image-1 {
+    top: 60px;
     position: relative;
     width: 275px;
     height: 110px;
     padding: 15px;
     background-color: #fafafa;
     border-radius: 10px;
-    margin-bottom: 30px;
-    margin-top: 2%;
-    margin-left: 45%;
-    margin-right: 1%;
+    overflow: auto;
 }
 
-.text-image-1::after {
-    content: "";
-    position: absolute;
-    bottom: -15px;
-    left: 30px;
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 15px solid #fafafa;
-  
-}
-
-.font-span-card{
+.font-span-card {
     font-weight: none;
 }

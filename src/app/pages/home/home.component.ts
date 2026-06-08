@@ -48,6 +48,7 @@ export class HomeComponent {
     this._loginService.currentUser$.subscribe((user) => {
       if (user) {
         this.usuarioLogado = user;
+        console.log(this.usuarioLogado);
         this.getReputacao(user.usuarioId);
       }
     });

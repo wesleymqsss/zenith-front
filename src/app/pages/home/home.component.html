@@ -1,13 +1,15 @@
 <app-header></app-header>
 <div class="cont-pai-panel">
   <div class="rigth-home">
-     <div style="    width: 100%; padding: 50px; padding-top: 0px; padding-bottom: 0px;" *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro'">
-        <app-card-reputacao [dados]="reputacaoData"></app-card-reputacao>
-      </div>
+    <div style="    width: 100%; padding: 50px; padding-top: 0px; padding-bottom: 0px;"
+      *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro'">
+      <app-card-reputacao [dados]="reputacaoData"></app-card-reputacao>
+    </div>
     <div class="carrousel-cont">
-      <div class="mr-13 flex justify-end items-center mt-0 font-semibold text-xl text-purple-50 gap-2" *ngIf="usuarioLogado.tipoUsuario === 'Criador'">
-        <span>Missões recentes</span>
-        <p-button icon="pi pi-plus" aria-label="Save" (click)="dialogCreateMissao()" />
+      <div class="mr-13 flex justify-center items-center mt-0 font-semibold text-xl text-purple-50 gap-2 p-2">
+        <span>Missões Criadas Recente</span>
+        <p-button icon="pi pi-plus" aria-label="Save" (click)="dialogCreateMissao()"
+          *ngIf="usuarioLogado.tipoUsuario === 'Criador'" />
       </div>
       <p-carousel [value]="missoes" [numVisible]="2" [numScroll]="1" [circular]="true"
         [responsiveOptions]="responsiveOptions" [autoplayInterval]="3000">
@@ -56,18 +58,19 @@
             </div>
             <div class="flex justify-between items-center">
               <div class="mt-0 font-semibold text-xl text-purple-800">{{ 'Nível mínimo: ' + item.nivelMinimo }}</div>
-              
+
               <span *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro' ">
                 <ng-container *ngIf="reputacaoData.bloqueioDias === 0; else blockedHome">
-                  <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
-                    (click)="dialogConfirm(item.id)" />
+                <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
+                  (click)="dialogConfirm(item.id)" />
                 </ng-container>
                 <ng-template #blockedHome>
-                  <p-message severity="error" [text]="'Bloqueado por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>
+                  <p-message severity="error"
+                    [text]="'Bloqueado por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>
                 </ng-template>
               </span>
 
-              <span *ngIf="usuarioLogado.tipoUsuario === 'Criador'">
+              <span *ngIf="usuarioLogado.tipoUsuario === 'Criador' && usuarioLogado.usuarioId === item.idCriador">
                 <p-button label="Editar" icon="pi pi-pen-to-square" styleClass="ml-2"
                   (click)="dialogCreateMissao(item.id)" />
               </span>
@@ -75,6 +78,61 @@
                 <p-button label="Excluir" icon="pi pi-trash" styleClass="ml-2" severity="danger"
                   (click)="deletarMissaoId(item.id)" />
               </span>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+    <div class="carrousel-cont">
+      <div class="mr-13 flex justify-center items-center mt-0 font-semibold text-xl text-purple-50 gap-2 p-2">
+        <span>Missões Recomendadas Para o Seu Perfil</span>
+        <p-button icon="pi pi-plus" aria-label="Save" (click)="dialogCreateMissao()"
+          *ngIf="usuarioLogado.tipoUsuario === 'Criador'" />
+      </div>
+      <p-carousel [value]="missoes" [numVisible]="2" [numScroll]="1" [circular]="true"
+        [responsiveOptions]="responsiveOptions" [autoplayInterval]="3000">
+        <ng-template pTemplate="item" let-item>
+          <div class="border border-purple-200 dark:border-purple-700 rounded m-2 p-4 bg-slate-100">
+            <div class="mb-3">
+              <div class="relative mx-auto">
+                <p-tag [value]="item.status" [severity]="getSeverity(item.status)" class="absolute dark:!bg-purple-800"
+                  [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+              </div>
+            </div>
+            <div class="info-card mt-10">
+              <div class="mt-4 font-medium">{{ item.titulo }}</div>
+              <div class="mt-4 font-medium">localizacao:
+                <span class="font-span-card">
+                  {{ item.localizacao }}
+
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Data criação:
+                <span class="font-span-card">
+                  {{ item.dataCriacao | date: 'dd/mm/yyyy'}}
+
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Recompensa:
+                <span class="font-span-card">
+                  {{ item.recompensa }}
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Tipo de missão:
+                <span class="font-span-card">
+                  {{ item.tipoMissao }}
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Classe preferida:
+                <span class="font-span-card">
+                  {{ item.classePreferida }}
+                </span>
+              </div>
+              <div class="mt-4 font-medium">Descrição:
+                <span class="font-span-card">
+                  {{ item.descricao }}
+                </span>
+              </div>
             </div>
           </div>
         </ng-template>

@@ -1,8 +1,20 @@
 <app-header></app-header>
 
 <div class="container mx-auto p-4">
-    <div class="mb-6" *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro'">
+    <div class="mb-6 flex justify-between" *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro'">
         <app-card-reputacao [dados]="reputacaoData"></app-card-reputacao>
+        <div>
+            <label for="email" class="label-input" style="color: #fff">Alterar level:</label>
+            <div class="flex items-center gap-4 mb-4 content-input">
+                <p-inputgroup>
+                    <p-inputgroup-addon>
+                        <i class="pi pi-user-edit"></i>
+                    </p-inputgroup-addon>
+                    <input pInputText  type="number" [(ngModel)]="valueLevel" class="flex-auto" />
+                </p-inputgroup>
+                <p-button label="salvar" styleClass="p-button-success" (click)="atualizarLevel()"></p-button>
+            </div>
+        </div>
     </div>
 
     <div class="flex flex-wrap gap-2 mb-6 p-4 bg-surface-50 dark:bg-surface-900 shadow-1" style="border-radius: 8px;">
@@ -39,20 +51,33 @@
                     <span class="p-tag" [ngClass]="'p-tag-' + getSeverity(missao)">{{ missao.status }}</span>
 
                 </div>
-                <p-button *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'criador'"
-                    icon="pi pi-trash" styleClass="p-button-danger" (click)="deletarMissao(missao.id)">
-                </p-button>
+
+                <div class="flex justify-between items-center" style="padding-top: 2px;">
+                    <ng-container
+                        *ngIf="missao.status === 'Concluída' && usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'criador'">
+
+                        <div class="card flex justify-center">
+                            <p-rating (onRate)="abrirModalAvaliacao(missao.id, $event.value)" />
+                        </div>
+
+                    </ng-container>
+
+                    <p-button *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'criador'"
+                        icon="pi pi-trash" styleClass="p-button-danger" (click)="deletarMissao(missao.id)">
+                    </p-button>
+                </div>
 
                 <ng-container
                     *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro' && missao.status === 'Em andamento'">
-                    <div class="flex gap-2" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated" >
+                    <div class="flex gap-2" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated">
                         <p-button label="Concluir" styleClass="p-button-success"
                             (click)="concluirMissao(missao.id)"></p-button>
                         <p-button label="Cancelar" styleClass="p-button-danger"
                             (click)="abrirDialogCancelarMissao(missao.id)"></p-button>
                     </div>
                     <ng-template #blockedCreated>
-                      <p-message severity="error" [text]="'Bloqueado de fazer missões por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>
+                        <p-message severity="error"
+                            [text]="'Bloqueado de fazer missões por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>
                     </ng-template>
                 </ng-container>
             </ng-template>
@@ -66,38 +91,59 @@
 </div>
 
 <div class="card flex justify-center">
-  <p-dialog header="Motivo do Cancelamento" [modal]="true" [(visible)]="visibleModalCreateMissao"
-    [style]="{ width: '50rem'}">
-    <div class="flex justify-end gap-2 flex-col">
-      <form [formGroup]="formCancelarMissao" class="h-full flex flex-col justify-between">
-        <div class="flex flex-col gap-2 mb-4">
-          <textarea 
-            style="width: 100%; padding: 0.5rem; border-radius: 0.25rem; border: 1px solid #ccc;"
-            id="motivo" 
-            formControlName="motivo" 
-            pInputTextarea
-            [autoResize]="true"
-            rows="5" 
-            class="w-full p-2 border-round border-1 border-300"
-            placeholder="Informe o motivo do cancelamento...">
+    <p-dialog header="Motivo do Cancelamento" [modal]="true" [(visible)]="visibleModalCreateMissao"
+        [style]="{ width: '50rem'}">
+        <div class="flex justify-end gap-2 flex-col">
+            <form [formGroup]="formCancelarMissao" class="h-full flex flex-col justify-between">
+                <div class="flex flex-col gap-2 mb-4">
+                    <textarea style="width: 100%; padding: 0.5rem; border-radius: 0.25rem; border: 1px solid #ccc;"
+                        id="motivo" formControlName="motivo" pInputTextarea [autoResize]="true" rows="5"
+                        class="w-full p-2 border-round border-1 border-300"
+                        placeholder="Informe o motivo do cancelamento...">
           </textarea>
-        </div>
+                </div>
 
-        <div class="flex gap-4 mt-4">
-            <div class="flex flex-col gap-1">
-                <span class="font-medium text-sm">Reputação Perdida:</span>
-                <p-tag [value]="formCancelarMissao.value.reputacaoPerdida" severity="danger"></p-tag>
-            </div>
-            <div class="flex flex-col gap-1" >
-                <span class="font-medium text-sm">Dias de Bloqueio:</span>
-                <p-tag [value]="formCancelarMissao.value.bloqueioDias" severity="danger"></p-tag>
+                <div class="flex gap-4 mt-4">
+                    <div class="flex flex-col gap-1">
+                        <span class="font-medium text-sm">Reputação Perdida:</span>
+                        <p-tag [value]="formCancelarMissao.value.reputacaoPerdida" severity="danger"></p-tag>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-medium text-sm">Dias de Bloqueio:</span>
+                        <p-tag [value]="formCancelarMissao.value.bloqueioDias" severity="danger"></p-tag>
+                    </div>
+                </div>
+            </form>
+            <div class=" w-full flex gap-5  justify-end">
+                <p-button label="Cancelar" severity="secondary" (click)="visibleModalCreateMissao = false" />
+                <p-button label="Salvar" (click)="cancelarMissao()" />
             </div>
         </div>
-      </form>
-      <div class=" w-full flex gap-5  justify-end">
-        <p-button label="Cancelar" severity="secondary" (click)="visibleModalCreateMissao = false" />
-        <p-button label="Salvar" (click)="cancelarMissao()" />
-      </div>
-    </div>
-  </p-dialog>
+    </p-dialog>
+</div>
+
+<div class="card flex justify-center">
+    <p-dialog header="Avaliação da Missão" [modal]="true" [(visible)]="visibleModalAvalicao"
+        [style]="{ width: '40rem'}">
+        <div class="flex flex-col gap-4">
+            <form [formGroup]="formAvaliacao" class="flex flex-col gap-4">
+                <div class="flex flex-col gap-2">
+                    <label for="nota" class="font-bold">Nota:</label>
+                    <p-rating formControlName="nota" [readonly]="true"></p-rating>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="justificativa" class="font-bold">Justificativa:</label>
+                    <textarea id="justificativa" formControlName="justificativa" pInputTextarea [autoResize]="true"
+                        rows="5" class="w-full p-2 border-round border-1"
+                        placeholder="Descreva sua experiência com esta missão...">
+                    </textarea>
+                </div>
+            </form>
+            <div class="w-full flex gap-3 justify-end">
+                <p-button label="Cancelar" severity="secondary" (click)="fecharModalAvalicao()" />
+                <p-button label="Enviar Avaliação" (click)="salvarAvaliacao()" />
+            </div>
+        </div>
+    </p-dialog>
 </div>

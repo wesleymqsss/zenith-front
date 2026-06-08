@@ -34,4 +34,8 @@ export class UsuarioService {
   getUsers(): Observable<ApiResponsePagina<Usuario>>{
     return this.http.get<ApiResponsePagina<Usuario>>(this.url);
   }
+
+  atualizarLevelUsuario(novoNivel: number): Observable<any> {
+    return this.http.patch(`${this.url}/me/nivel`, { novoNivel });
+  }    
 }

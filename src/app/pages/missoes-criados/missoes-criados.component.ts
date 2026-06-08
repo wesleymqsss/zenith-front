@@ -7,6 +7,8 @@ import { LoginService } from '../../core/service/login.service';
 import { MissoesService } from '../../core/service/missoes.service';
 import { SnackbarService } from '../../core/service/snackbar.service';
 import { ReputacaoResponse } from '../../core/interface/usuario';
+import { AvaliacaoMissaoService } from '../../core/service/avaliacao-missao.service';
+import { UsuarioService } from '../../core/service/usuario.service';
 
 @Component({
   selector: 'app-missoes-criados',
@@ -16,6 +18,8 @@ import { ReputacaoResponse } from '../../core/interface/usuario';
 })
 export class MissoesCriadosComponent {
   formCancelarMissao!: FormGroup;
+  formAvaliacao!: FormGroup;
+  valueLevel!: number;
   usuarioLogado!: Logged;
   layout: 'list' | 'grid' = 'grid';
   options = ['list', 'grid'];
@@ -23,6 +27,7 @@ export class MissoesCriadosComponent {
   missoesFiltradas: MissaoResponse[] = [];
   statusDisponiveis: string[] = ['Disponível', 'Em andamento', 'Concluída', 'Cancelada'];
   visibleModalCreateMissao: boolean = false;
+  visibleModalAvalicao: boolean = false;
   idMissao!: number;
   reputacaoData: ReputacaoResponse = {
     usuarioId: 0,
@@ -33,8 +38,10 @@ export class MissoesCriadosComponent {
   constructor(
     private readonly _loginService: LoginService,
     private readonly _missoesService: MissoesService,
+    private readonly _avaliacaoMissaoService: AvaliacaoMissaoService,
     private readonly _snackbarService: SnackbarService,
     private readonly _fb: FormBuilder,
+    private readonly _usuarioService: UsuarioService,
   ) { }
 
   ngOnInit() {
@@ -51,6 +58,13 @@ export class MissoesCriadosComponent {
       motivo: [""],
       reputacaoPerdida: [null],
       bloqueioDias: [null],
+    });
+
+    this.formAvaliacao = this._fb.group({
+      idMissaoAceita: [0],
+      idAvaliado: [0],
+      nota: [0],
+      justificativa: [""],
     });
   }
 
@@ -152,6 +166,53 @@ export class MissoesCriadosComponent {
       motivo: "",
       reputacaoPerdida: Math.floor(Math.random() * 10) + 1,
       bloqueioDias: Math.floor(Math.random() * 5) + 1,
+    });
+  }
+
+  abrirModalAvaliacao(missaoId: number, nota: any) {
+    this.formAvaliacao.patchValue({
+      idMissaoAceita: missaoId,
+      idAvaliado: this.usuarioLogado.usuarioId,
+      nota: nota,
+    });
+    this.visibleModalAvalicao = true;
+  }
+
+  fecharModalAvalicao() {
+    this.formAvaliacao.reset();
+    this.visibleModalAvalicao = false;
+  }
+
+  salvarAvaliacao() {
+    this._avaliacaoMissaoService.avalicaoMissao(this.formAvaliacao.value).subscribe({
+      next: () => {
+        this._snackbarService.showSuccess('Avaliação registrada com sucesso!');
+        this.visibleModalAvalicao = false;
+        this.formAvaliacao.reset();
+        this.getMissoesPorUsuario();
+      },
+
+      error: (err) => {
+        console.error('Erro ao registrar avaliação:', err);
+        this._snackbarService.showError('Erro ao registrar avaliação. Por favor, tente novamente.');
+      },
+    });
+  }
+
+  atualizarLevel() {
+    this._usuarioService.atualizarLevelUsuario(this.valueLevel).subscribe({
+      next: () => {
+        this._snackbarService.showSuccess('Level atualizado com sucesso!');
+        this.getReputacao(this.usuarioLogado.usuarioId);
+      },
+      error: (httpError: HttpErrorResponse) => {
+        if (httpError.status === 400) {
+          this._snackbarService.showWarn('Level inválido. Por favor, insira um número válido.');
+        } else {
+          this._snackbarService.showError('Ocorreu um erro ao atualizar o level. Por favor, tente novamente.');
+          console.error('Erro ao atualizar level:', httpError);
+        }
+      },
     });
   }
 }

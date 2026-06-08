@@ -38,6 +38,7 @@ import { DataView } from 'primeng/dataview';
 import { Rating } from 'primeng/rating';
 import { SelectButton } from 'primeng/selectbutton';
 import { DividerModule } from 'primeng/divider';
+import { RatingModule } from 'primeng/rating';
 @NgModule({
   imports: [
     FocusTrapModule,
@@ -83,7 +84,8 @@ import { DividerModule } from 'primeng/divider';
     DataView,
     Rating,
     SelectButton,
-    DividerModule
+    DividerModule,
+    RatingModule
   ],
   exports: [
     FocusTrapModule,
@@ -129,7 +131,8 @@ import { DividerModule } from 'primeng/divider';
     DataView,
     Rating,
     SelectButton,
-    DividerModule
+    DividerModule,
+    RatingModule
   ]
 })
 export class MaterialModule { }
