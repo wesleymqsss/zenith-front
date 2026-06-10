@@ -1,4 +1,26 @@
 <app-header></app-header>
 <section class="grupos-page">
-
+    <div class="content-list-aventureiro">
+        <form [formGroup]="grupoForm" (ngSubmit)="criarGrupo()">
+            <div class="input-row">
+                <label for="nome" class="label-input">Nome do Grupo:</label>
+                <div class="flex items-center gap-4 mb-4 content-input">
+                    <p-inputgroup>
+                        <p-inputgroup-addon>
+                            <i class="pi pi-envelope"></i>
+                        </p-inputgroup-addon>
+                        <input id="nome" pInputText formControlName="nomeGrupo" class="flex-auto" />
+                    </p-inputgroup>
+                </div>
+            </div>
+            
+            <div  style="margin-top: 10px;">
+                <p-button label="Criar grupo" type="submit"/>
+            </div>
+        </form>
+        <app-lista-eventureiro [dataSource]="dataSourceAventureiro"></app-lista-eventureiro>
+    </div>
+    <div class="content-list-grupos">
+        
+    </div>
 </section>

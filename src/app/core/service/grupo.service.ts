@@ -1,0 +1,19 @@
+import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environments';
+import { HttpClient } from '@angular/common/http';
+import { GrupoRequest } from '../interface/grupoRequest';
+import { GrupoResponse } from '../interface/grupoResponse';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GrupoService {
+  private url = `${environment.api_url}Grupos`;
+
+  constructor(private readonly _http: HttpClient) { }
+
+  criarGrupo(payloadGrupo: GrupoRequest):Observable <GrupoResponse> {
+    return this._http.post<GrupoResponse>(`${this.url}`, payloadGrupo);
+  } 
+}
