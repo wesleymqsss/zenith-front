@@ -13,6 +13,7 @@ export interface UserDetails {
     referenciaEndereco: string | null;
     estado: string | null;
     sobreNos: string | null;
+    idGrupo: number
 }
 
 

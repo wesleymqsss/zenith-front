@@ -51,6 +51,7 @@ export class GruposComponent implements OnInit {
             next: (response) => {
                 this._snackbarService.showSuccess('Grupo criado com sucesso!!!');
                 this.grupoForm.reset();
+                this.carregarGrupos();
             },
             error: (error) => {
                 this._snackbarService.showError(`Erro ao criar grupo: ${error.message}`);
@@ -67,7 +68,5 @@ export class GruposComponent implements OnInit {
             );
         });
     }
-
-
 
 }
