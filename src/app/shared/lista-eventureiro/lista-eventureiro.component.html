@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="w-full flex justify-center">
-                    <p-button icon="pi pi-bolt" class="flex-auto md:flex-initial whitespace-nowrap" severity="contrast"
+                    <p-button  *ngIf="usuarioLogado.tipoUsuario !== 'Criador'" icon="pi pi-reddit" class="flex-auto md:flex-initial whitespace-nowrap" severity="contrast"
                         label="Convidar para sua Guilda" (click)="convidarParaGrupo(item.id, item.email, item.idGrupo)" />
 
                 </div>

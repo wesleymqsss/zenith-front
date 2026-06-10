@@ -1,7 +1,7 @@
 <app-header></app-header>
 <section class="grupos-page">
     <div class="content-list-aventureiro">
-        <form [formGroup]="grupoForm" (ngSubmit)="criarGrupo()">
+        <form [formGroup]="grupoForm" (ngSubmit)="criarGrupo()"  *ngIf="usuarioLogado.tipoUsuario !== 'Criador'">
             <div class="input-row">
                 <label for="nome" class="label-input">Nome da Guilda:</label>
                 <div class="flex items-center gap-3 mb-3 content-input">

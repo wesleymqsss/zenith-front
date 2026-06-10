@@ -5,6 +5,7 @@ import { SnackbarService } from '../../core/service/snackbar.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UsuarioService } from '../../core/service/usuario.service';
 import { LoginService } from '../../core/service/login.service';
+import { Logged } from '../../core/interface/userLogin';
 
 @Component({
   selector: 'app-lista-eventureiro',
@@ -15,7 +16,7 @@ import { LoginService } from '../../core/service/login.service';
 export class ListaEventureiroComponent {
   @Input() dataSource: Usuario[] = [];
   groupIdUserLogged!: number;
-
+  usuarioLogado!: Logged;
   constructor(
     private readonly _grupoService: GrupoService,
     private readonly _snackbarService: SnackbarService,
@@ -27,6 +28,7 @@ export class ListaEventureiroComponent {
     this._loginService.currentUser$.subscribe((user) => {
       if (user) {
         this.getUserId(user.usuarioId);
+        this.usuarioLogado = user;
       }
     });
   }
@@ -34,7 +36,7 @@ export class ListaEventureiroComponent {
   getUserId(usuarioId: number) {
     this._usuarioService.getUserDetails(usuarioId.toString()).subscribe({
       next: (response) => {
-        if(response[0].idGrupo){
+        if (response[0].idGrupo) {
           this.groupIdUserLogged = response[0].idGrupo;
         }
       },
@@ -80,12 +82,12 @@ export class ListaEventureiroComponent {
   }
 
   convidarParaGrupo(idUser: number, emailUser: string, groupId: number): void {
-    if(groupId){
+    if (groupId) {
       this._snackbarService.showWarn('O usuário que você deseja convidar já faz parte de um grupo, portanto não pode ser convidado para outro!');
       return;
     }
 
-    if(this.groupIdUserLogged){
+    if (this.groupIdUserLogged) {
       this._grupoService.convidarParaGrupo(this.groupIdUserLogged, { idUsuario: idUser, email: emailUser }).subscribe({
         next: () => {
           this._snackbarService.showSuccess('Usuário adicionado ao grupo com sucesso!');
@@ -94,7 +96,7 @@ export class ListaEventureiroComponent {
           this._snackbarService.showError(`Erro ao convidar para grupo: ${error.error?.message || error.message}`);
         }
       });
-    }else{
+    } else {
       this._snackbarService.showWarn('Faça parte de um grupo para convidar outros aventureiros!');
     }
   }

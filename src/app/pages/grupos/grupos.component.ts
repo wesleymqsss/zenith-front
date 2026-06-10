@@ -7,6 +7,7 @@ import { GrupoRequest } from '../../core/interface/grupoRequest';
 import { GrupoService } from '../../core/service/grupo.service';
 import { SnackbarService } from '../../core/service/snackbar.service';
 import { GrupoResponse } from '../../core/interface/grupoResponse';
+import { Logged } from '../../core/interface/userLogin';
 
 @Component({
     selector: 'app-grupos',
@@ -18,7 +19,7 @@ export class GruposComponent implements OnInit {
     grupoForm!: FormGroup;
     dataSourceAventureiro: Usuario[] = [];
     grupoReponse: GrupoResponse[] = [];
-
+    usuarioLogado!: Logged;
     constructor(
         private readonly _loginService: LoginService,
         private readonly _usuarioService: UsuarioService,
@@ -28,6 +29,12 @@ export class GruposComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this._loginService.currentUser$.subscribe((user) => {
+            if (user) {
+                this.usuarioLogado = user;
+            }
+        });
+
         this.grupoForm = this._formBuilder.group<GrupoRequest>({
             nomeGrupo: ['', Validators.required],
         } as any);

@@ -41,6 +41,8 @@ import { DividerModule } from 'primeng/divider';
 import { RatingModule } from 'primeng/rating';
 import { FieldsetModule } from 'primeng/fieldset';
 import { OrderListModule } from 'primeng/orderlist';
+import { TooltipModule } from 'primeng/tooltip';
+
 @NgModule({
   imports: [
     FocusTrapModule,
@@ -89,7 +91,9 @@ import { OrderListModule } from 'primeng/orderlist';
     DividerModule,
     RatingModule,
     FieldsetModule,
-    OrderListModule
+    OrderListModule,
+    AvatarModule,
+    TooltipModule 
   ],
   exports: [
     FocusTrapModule,
@@ -138,7 +142,9 @@ import { OrderListModule } from 'primeng/orderlist';
     DividerModule,
     RatingModule,
     FieldsetModule,
-    OrderListModule
+    OrderListModule,
+    AvatarModule,
+    TooltipModule 
   ]
 })
 export class MaterialModule { }
