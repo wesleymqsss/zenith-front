@@ -1,9 +1,11 @@
 .grupos-page {
-    min-height: 100%;
+    min-height: 96%;
+    max-height: 98%;
     display: flex;
     justify-content: center;
     padding: 20px;
     gap: 10px;
+    overflow: auto;
 }
 
 .input-row {
@@ -24,9 +26,12 @@ form {
     border-radius: 8px;
 }
 
-.content-list-aventureiro{
+.content-list-aventureiro {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
+.content-list-grupos{
+    max-height: 100%;
+}

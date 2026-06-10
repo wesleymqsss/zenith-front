@@ -15,5 +15,10 @@ export class GrupoService {
 
   criarGrupo(payloadGrupo: GrupoRequest):Observable <GrupoResponse> {
     return this._http.post<GrupoResponse>(`${this.url}`, payloadGrupo);
-  } 
+  }
+
+  getGrupos(): Observable<GrupoResponse[]> {
+    return this._http.get<GrupoResponse[]>(`${this.url}`);
+  }
+   
 }

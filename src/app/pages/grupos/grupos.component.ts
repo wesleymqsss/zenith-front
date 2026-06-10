@@ -6,6 +6,7 @@ import { LoginService } from '../../core/service/login.service';
 import { GrupoRequest } from '../../core/interface/grupoRequest';
 import { GrupoService } from '../../core/service/grupo.service';
 import { SnackbarService } from '../../core/service/snackbar.service';
+import { GrupoResponse } from '../../core/interface/grupoResponse';
 
 @Component({
     selector: 'app-grupos',
@@ -16,6 +17,8 @@ import { SnackbarService } from '../../core/service/snackbar.service';
 export class GruposComponent implements OnInit {
     grupoForm!: FormGroup;
     dataSourceAventureiro: Usuario[] = [];
+    grupoReponse: GrupoResponse[] = [];
+
     constructor(
         private readonly _loginService: LoginService,
         private readonly _usuarioService: UsuarioService,
@@ -28,19 +31,26 @@ export class GruposComponent implements OnInit {
         this.grupoForm = this._formBuilder.group<GrupoRequest>({
             nomeGrupo: ['', Validators.required],
         } as any);
-        this.carregarAventureiros()
+
+        this.carregarAventureiros();
+        this.carregarGrupos();
+    }
+
+    carregarGrupos() {
+        this._grupoService.getGrupos().subscribe((response) => this.grupoReponse = response);
     }
 
     criarGrupo(): void {
         this.grupoForm.markAllAsTouched();
-        if(this.grupoForm.invalid) {
+        if (this.grupoForm.invalid) {
             this._snackbarService.showWarn('Por favor, preencha o nome do grupo.');
             return;
         }
 
         this._grupoService.criarGrupo(this.grupoForm.value).subscribe({
             next: (response) => {
-              this._snackbarService.showSuccess('Grupo criado com sucesso!!!');
+                this._snackbarService.showSuccess('Grupo criado com sucesso!!!');
+                this.grupoForm.reset();
             },
             error: (error) => {
                 this._snackbarService.showError(`Erro ao criar grupo: ${error.message}`);
@@ -57,6 +67,7 @@ export class GruposComponent implements OnInit {
             );
         });
     }
+
 
 
 }

@@ -1,0 +1,52 @@
+<div class="card">
+	<p-dataview [value]="grupos" [rows]="4" [paginator]="true" layout="list">
+		<ng-template #list let-items>
+			<div class="grid grid-cols-12 gap-4 grid-nogutter p-4 m-b-4">
+				<div class="col-span-12" *ngFor="let grupo of items; let first = first">
+					<div class="grupo-card flex flex-col sm:flex-row sm:items-center p-4 gap-3 rounded-2xl border"
+						[ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
+						<div class="md:w-30 relative flex justify-center flex-col items-center gap-2">
+							<p-tag [value]="grupo.quantidadeMembros + ' membros'" [severity]="getSeverity(grupo)"
+								class="dark:!bg-surface-900"/>
+							<div class="grupo-badge w-24 h-24 rounded-2xl flex items-center justify-center border border-white/10">
+								<i class="pi pi-shield text-4xl text-white"></i>
+							</div>
+						</div>
+
+						<div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-4">
+							<div class="flex flex-row md:flex-col justify-between items-start gap-3">
+								<div>
+									<span class="font-medium text-violet-300 text-sm uppercase tracking-[0.2em]">Guilda</span>
+									<div class="text-2xl font-bold text-violet-50 mt-2">{{ grupo.nomeGrupo }}</div>
+									<div class="text-sm text-violet-200/80 mt-1">
+										Missão vinculada: <span class="text-fuchsia-200 font-semibold">#{{ grupo.idMissaoVinculada }}</span>
+									</div>
+								</div>
+
+								<div class="grupo-id-shell p-1">
+									<div class="grupo-id-chip flex items-center gap-2 justify-center py-1 px-3">
+										<span class="text-violet-50 font-medium text-sm">{{ grupo.id }}</span>
+										<i class="pi pi-crown text-fuchsia-300"></i>
+									</div>
+								</div>
+							</div>
+
+							<div class="flex flex-col md:items-end gap-4">
+								<div class="flex flex-col items-start md:items-end text-sm text-violet-200/80 gap-1">
+									<span>Criada em</span>
+									<span class="text-base font-semibold text-violet-50">{{ grupo.dataCriacao | date:'dd/MM/yyyy' }}</span>
+								</div>
+
+								<div class="flex  flex-wrap flex-col  gap-2">
+                                    <p-button icon="pi pi-bolt" class="flex-auto md:flex-initial whitespace-nowrap"
+										label="Entrar na guilda" />
+									<p-button icon="pi pi-users"class="w-ful" severity="secondary" label="Ver membros" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+	</p-dataview>
+</div>

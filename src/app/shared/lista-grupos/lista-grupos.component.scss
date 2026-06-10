@@ -1,0 +1,33 @@
+.card {
+	background:
+		radial-gradient(circle at top left, rgba(168, 85, 247, 0.22), transparent 38%),
+		radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.16), transparent 32%),
+		linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.98));
+	border: 1px solid rgba(168, 85, 247, 0.18);
+	border-radius: 1.5rem;
+	box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+	overflow: hidden;
+}
+
+.grupo-card {
+	background: linear-gradient(135deg, rgba(88, 28, 135, 0.86), rgba(49, 46, 129, 0.88) 52%, rgba(24, 24, 27, 0.96));
+	border-color: rgba(192, 132, 252, 0.18);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 16px 40px rgba(59, 7, 100, 0.25);
+}
+
+.grupo-badge {
+	background: linear-gradient(145deg, #a855f7, #7c3aed 48%, #4c1d95);
+	box-shadow: 0 18px 36px rgba(124, 58, 237, 0.35);
+}
+
+.grupo-id-shell {
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(216, 180, 254, 0.18);
+	border-radius: 30px;
+}
+
+.grupo-id-chip {
+	background: rgba(17, 24, 39, 0.82);
+	border-radius: 30px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.12);
+}

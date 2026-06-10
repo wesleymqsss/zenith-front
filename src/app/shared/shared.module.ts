@@ -13,9 +13,11 @@ import { Grafico2Component } from "./grafico-2/grafico-2.component";
 import { Grafico1Component } from "./grafico-1/grafico-1.component";
 import { DataNotFoundComponent } from './data-not-found/data-not-found.component';
 import { TagModule } from "primeng/tag";
+import { DataViewModule } from "primeng/dataview";
 import { CardReputacaoComponent } from './card-reputacao/card-reputacao.component';
 import { CarrosselMinhasAvaliacoesComponent } from './carrossel-minhas-avaliacoes/carrossel-minhas-avaliacoes.component';
 import { ListaEventureiroComponent } from './lista-eventureiro/lista-eventureiro.component';
+import { ListaGruposComponent } from './lista-grupos/lista-grupos.component';
 
 @NgModule({
     declarations: [
@@ -28,7 +30,8 @@ import { ListaEventureiroComponent } from './lista-eventureiro/lista-eventureiro
         DataNotFoundComponent,
         CardReputacaoComponent,
         CarrosselMinhasAvaliacoesComponent,
-        ListaEventureiroComponent
+        ListaEventureiroComponent,
+        ListaGruposComponent
     ],
     imports: [
         CommonModule,
@@ -38,7 +41,8 @@ import { ListaEventureiroComponent } from './lista-eventureiro/lista-eventureiro
         PipesModule,
         DirectivesModule,
         ReactiveFormsModule,
-        TagModule
+        TagModule,
+        DataViewModule
         
     ],
     exports: [
@@ -52,8 +56,11 @@ import { ListaEventureiroComponent } from './lista-eventureiro/lista-eventureiro
         DataNotFoundComponent,
         CardReputacaoComponent,
         TagModule,
+        DataViewModule,
         CarrosselMinhasAvaliacoesComponent,
         ListaEventureiroComponent
+        ,
+        ListaGruposComponent
     ]
 })
 export class SharedModule { }
