@@ -1,6 +1,6 @@
 export interface UserDetails {
-    id: string;
-    email: string | null;
+    id: number;
+    email: string;
     tipoPerfil: number | null;
     nome: string | null;
     cpfCnpj: string | null;

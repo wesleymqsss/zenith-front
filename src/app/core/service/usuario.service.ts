@@ -14,8 +14,10 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) { }
 
-  getUserDetails(userId: string): Observable<UserDetails> {
-    return this.http.get<UserDetails>(`${this.url}/` + userId)
+  getUserDetails(userId: string): Observable<UserDetails[]> {
+    const params =  new HttpParams().set('id', userId);
+
+    return this.http.get<UserDetails[]>(`${this.url}`, {params})
   }
 
   userDetailsUpdate(id: string, responseBody: any): Observable<any> {
