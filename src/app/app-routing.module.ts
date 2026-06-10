@@ -22,6 +22,11 @@ const routes: Routes = [
   },
 
   {
+    path: 'grupos',
+    loadChildren: () => import('./pages/grupos/grupos.module').then(m => m.GruposModule)
+  },
+
+  {
     path: 'missoes-criados',
     loadChildren: () => import('./pages/missoes-criados/missoes-criados.module').then(m => m.MissoesCriadosModule)
   },

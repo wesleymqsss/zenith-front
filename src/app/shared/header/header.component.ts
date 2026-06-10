@@ -42,6 +42,11 @@ export class HeaderComponent {
         routerLink: ['/lista-comunidade'],
       },
       {
+        label: 'Grupos',
+        icon: 'pi pi-users',
+        routerLink: ['/grupos'],
+      },
+      {
         label: 'Histórico de Missões',
         icon: 'pi pi pi-users',
         routerLink: ['/minhas-missoes-historico'],
