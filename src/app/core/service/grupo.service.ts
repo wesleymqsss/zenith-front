@@ -24,8 +24,13 @@ export class GrupoService {
   convidarParaGrupo(idGrupo: number, payloadConvidarGrupo: ConvidarGrupoRequest): Observable<any> {
     return this._http.post(`${this.url}/${idGrupo}/membros`, payloadConvidarGrupo);
   }
-  
+
   visualizarMembrosGrupo(idGrupo: number): Observable<MembroGrupoResponse[]> {
     return this._http.get<MembroGrupoResponse[]>(`${this.url}/${idGrupo}/membros`);
   }
+
+  aceitarMissaoComGrupo(idMissao : number, idGrupo: number): Observable<any> {
+    return this._http.post<any>(`${this.url}/${idGrupo}/missoes/${idMissao}/aceitar`, null);
+  }
+  
 }

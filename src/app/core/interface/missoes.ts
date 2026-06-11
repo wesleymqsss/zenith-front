@@ -37,8 +37,20 @@ export interface HistoricoMissao {
   resultado: 'Sucesso' | 'Fracasso';
   avaliacaoRecebida: number | null;
   justificativa: string;
-  dataRegistro: string; 
+  dataRegistro: string;
   idCriador: number;
   nomeCriador: string;
 }
 
+export interface MissaoRecomendadaResponse {
+  id: number;
+  titulo: string;
+  localizacao: string;
+  recompensa: number;
+  tipoMissao: string;
+  nivelMinimo: number;
+  classePreferida: string;
+  idCriador: number;
+  nomeCriador: string;
+  score: number;
+}

@@ -21,15 +21,19 @@ export class MissoesCriadosComponent {
   formCancelarMissao!: FormGroup;
   formAvaliacao!: FormGroup;
   valueLevel!: number;
+  nivelIdUserLogged!: number | null;
+  grupoUserIdLogged!: number;
   usuarioLogado!: Logged;
   layout: 'list' | 'grid' = 'grid';
   options = ['list', 'grid'];
   minhasMissoesResponse: MissaoResponse[] = [];
+  minhasMissoesComGrupoResponse: MissaoResponse[] = [];
   missoesFiltradas: MissaoResponse[] = [];
   statusDisponiveis: string[] = ['Disponível', 'Em andamento', 'Concluída', 'Cancelada'];
   visibleModalCreateMissao: boolean = false;
   visibleModalAvalicao: boolean = false;
   idMissao!: number;
+  nivelUserLogged!: number;
   avaliacoesUsuarioLogado: AvaliacoesResponse[] = [];
   reputacaoData: ReputacaoResponse = {
     usuarioId: 0,
@@ -52,6 +56,7 @@ export class MissoesCriadosComponent {
         this.usuarioLogado = user;
         this.getReputacao(user.usuarioId);
         this.getAvaliacoesUsuarioLogado(user.usuarioId);
+        this.getUserId(user.usuarioId);
       }
     });
 
@@ -68,6 +73,22 @@ export class MissoesCriadosComponent {
       nota: [0],
       justificativa: [""],
     });
+
+  }
+
+  getUserId(usuarioId: number) {
+    this._usuarioService.getUserDetails(usuarioId.toString()).subscribe({
+      next: (response) => {
+        if (response[0].idGrupo) {
+          this.nivelIdUserLogged = response[0].nivel;
+          this.grupoUserIdLogged = response[0].idGrupo;
+          this.getMissoesPorGrupo();
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao buscar detalhes do usuário :', error);
+      }
+    });
   }
 
   getMissoesPorUsuario() {
@@ -79,6 +100,18 @@ export class MissoesCriadosComponent {
         this.minhasMissoesResponse = response;
         this.missoesFiltradas = response;
         console.log('Missões por usuário:', response);
+      });
+  }
+
+  getMissoesPorGrupo() {
+    console.log('ID do grupo do usuário logado:', this.grupoUserIdLogged);
+    if (!this.grupoUserIdLogged) return;
+
+    this._missoesService
+      .getMissoesPorGrupo(this.grupoUserIdLogged)
+      .subscribe((response) => {
+        this.minhasMissoesComGrupoResponse = response;
+        console.log('Missões por grupo:', response);
       });
   }
 
@@ -207,6 +240,7 @@ export class MissoesCriadosComponent {
       next: () => {
         this._snackbarService.showSuccess('Level atualizado com sucesso!');
         this.getReputacao(this.usuarioLogado.usuarioId);
+        this.getUserId(this.usuarioLogado.usuarioId);
       },
       error: (httpError: HttpErrorResponse) => {
         if (httpError.status === 400) {

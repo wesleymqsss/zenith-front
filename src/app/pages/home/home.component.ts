@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../../core/service/login.service';
 import { Logged } from '../../core/interface/userLogin';
-import { MissaoResponse } from '../../core/interface/missoes';
+import { MissaoRecomendadaResponse, MissaoResponse } from '../../core/interface/missoes';
 import { MissoesService } from '../../core/service/missoes.service';
 import { SnackbarService } from '../../core/service/snackbar.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReputacaoResponse } from '../../core/interface/usuario';
+import { GrupoService } from '../../core/service/grupo.service';
+import { UsuarioService } from '../../core/service/usuario.service';
 
 interface IselectCodeString {
   name: string;
@@ -24,13 +26,16 @@ export class HomeComponent {
   idMissao: number = 0;
   usuarioLogado!: Logged;
   missoes: MissaoResponse[] = [];
+  missoesRecomendadas: MissaoRecomendadaResponse[] = [];
   visible: boolean = false;
+  visibleAceitarComGrupo: boolean = false;
   responsiveOptions: any[] | undefined;
   visibleModalCreateMissao: boolean = false;
   classes: IselectCodeString[] | undefined;
   tipoMissao: IselectCodeString[] | undefined;
   editMode: boolean = false;
   nomeBotao: string = '';
+  groupIdUserLogged!: number;
   reputacaoData: ReputacaoResponse = {
     usuarioId: 0,
     reputacao: 0,
@@ -42,16 +47,21 @@ export class HomeComponent {
     private readonly _missoesService: MissoesService,
     private readonly _snackbarService: SnackbarService,
     private readonly _fb: FormBuilder,
-  ) {}
+    private readonly _grupoService: GrupoService,
+    private readonly _usuarioService: UsuarioService,
+  ) { }
 
   ngOnInit(): void {
     this._loginService.currentUser$.subscribe((user) => {
       if (user) {
         this.usuarioLogado = user;
-        console.log(this.usuarioLogado);
         this.getReputacao(user.usuarioId);
+        this.getUserId(user.usuarioId);
       }
     });
+
+    this.getMissoes();
+    this.getMissoesRecomendadas();
 
     this.classes = [
       { name: 'Mago', code: 'Mago' },
@@ -96,8 +106,6 @@ export class HomeComponent {
       },
     ];
 
-    this.getMissoes();
-
     this.formMissao = this._fb.group({
       id: [null],
       titulo: [null, [Validators.required]],
@@ -113,6 +121,19 @@ export class HomeComponent {
     });
   }
 
+  getUserId(usuarioId: number) {
+    this._usuarioService.getUserDetails(usuarioId.toString()).subscribe({
+      next: (response) => {
+        if (response[0].idGrupo) {
+          this.groupIdUserLogged = response[0].idGrupo;
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao buscar detalhes do usuário :', error);
+      }
+    });
+  }
+
   getReputacao(id: number) {
     this._loginService.getReputacao(id).subscribe({
       next: (data) => {
@@ -123,6 +144,7 @@ export class HomeComponent {
       },
     });
   }
+
 
   getSeverity(status: string) {
     switch (status) {
@@ -168,6 +190,11 @@ export class HomeComponent {
   dialogConfirm(id: number) {
     this.idMissao = id;
     this.visible = true;
+  }
+
+  dialogConfirmMissaoComGrupo(id: number) {
+    this.idMissao = id;
+    this.visibleAceitarComGrupo = true;
   }
 
   criarMissao() {
@@ -225,7 +252,7 @@ export class HomeComponent {
           this.formMissao.reset();
           this.visibleModalCreateMissao = false;
         },
-        error: () => {},
+        error: () => { },
       });
   }
 
@@ -251,7 +278,7 @@ export class HomeComponent {
           console.log(this.formMissao.getRawValue());
           this.editMode = true;
         },
-        error: () => {},
+        error: () => { },
       });
     }
 
@@ -269,5 +296,21 @@ export class HomeComponent {
         this._snackbarService.showSuccess(err.message);
       },
     });
+  }
+
+  getMissoesRecomendadas() {
+    this._missoesService.getMissaoRecomendada().subscribe((response) => (this.missoesRecomendadas = response));
+  }
+
+  aceitarMissaoComGrupo(idMissao: number) {
+    this._grupoService.aceitarMissaoComGrupo(idMissao, this.groupIdUserLogged).subscribe({
+      next: () => {
+        this._snackbarService.showSuccess('Missão aceita com sucesso!');
+        this.visibleAceitarComGrupo = false;        
+        this.getMissoes();
+      },
+      error: (err: HttpErrorResponse) => {        this._snackbarService.showError(err.message);
+      },
+    })
   }
 }

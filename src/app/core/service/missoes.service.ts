@@ -7,6 +7,7 @@ import {
   HistoricoMissao,
   MissaoResponse,
   CancelarMissaoPayload,
+  MissaoRecomendadaResponse,
 } from '../interface/missoes';
 import { MessageResponse } from '../interface/messageResponse';
 import { ApiResponsePagina } from '../interface/respostaPaginada';
@@ -28,6 +29,11 @@ export class MissoesService {
     return this._http.get<MissaoResponse[]>(`${this.url}filtrar`, { params });
   }
 
+  getMissoesPorGrupo(idGrupo: number): Observable<MissaoResponse[]> {
+    const params = new HttpParams().set('idGrupo', idGrupo);
+    return this._http.get<MissaoResponse[]>(`${this.url}filtrar`, { params });
+  }
+
   aceitarMissao(id: number): Observable<MessageResponse> {
     const payload = {
       status: "Em andamento",
@@ -35,7 +41,7 @@ export class MissoesService {
 
     return this._http.post<MessageResponse>(`${this.url}${id}/aceitar`, payload);
   }
-  
+
   concluirMissao(id: number): Observable<MessageResponse> {
     const url = `${environment.api_url}missoesaceitas/${id}/concluir`;
     return this._http.put<MessageResponse>(url, {});
@@ -92,5 +98,10 @@ export class MissoesService {
 
   deletarMissao(id: number): Observable<any> {
     return this._http.delete(`${this.url}${id}`);
+  }
+
+  getMissaoRecomendada(): Observable<MissaoRecomendadaResponse[]> {
+    const url = `${environment.api_url}recomendacoes/missoes`;
+    return this._http.get<MissaoRecomendadaResponse[]>(`${url}`);
   }
 }

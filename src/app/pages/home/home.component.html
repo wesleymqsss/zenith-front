@@ -60,10 +60,12 @@
               <div class="mt-0 font-semibold text-xl text-purple-800">{{ 'Nível mínimo: ' + item.nivelMinimo }}</div>
 
               <span *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro' ">
-                <!-- <ng-container *ngIf="reputacaoData.bloqueioDias === 0; else blockedHome"> -->
-                <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
-                  (click)="dialogConfirm(item.id)" />
-                <!-- </ng-container> -->
+                <ng-container *ngIf="reputacaoData.bloqueioDias === 0; else blockedHome">
+                  <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
+                    (click)="dialogConfirm(item.id)" />
+                  <p-button label="Aceitar com Grupo" severity="contrast" icon="pi pi-check-circle" styleClass="ml-2"
+                    (click)="dialogConfirmMissaoComGrupo(item.id)" />
+                </ng-container>
                 <ng-template #blockedHome>
                   <p-message severity="error"
                     [text]="'Bloqueado por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>
@@ -83,60 +85,92 @@
         </ng-template>
       </p-carousel>
     </div>
-    <div class="carrousel-cont">
+    <div class="carrousel-cont" *ngIf="usuarioLogado.tipoUsuario !== 'Criador'">
       <div class="mr-13 flex justify-center items-center mt-0 font-semibold text-xl text-purple-50 gap-2 p-2">
         <span>Missões Recomendadas Para o Seu Perfil</span>
-        <p-button icon="pi pi-plus" aria-label="Save" (click)="dialogCreateMissao()"
-          *ngIf="usuarioLogado.tipoUsuario === 'Criador'" />
       </div>
-      <p-carousel [value]="missoes" [numVisible]="2" [numScroll]="1" [circular]="true"
-        [responsiveOptions]="responsiveOptions" [autoplayInterval]="3000">
-        <ng-template pTemplate="item" let-item>
-          <div class="border border-purple-200 dark:border-purple-700 rounded m-2 p-4 bg-slate-100">
-            <div class="mb-3">
-              <div class="relative mx-auto">
-                <p-tag [value]="item.status" [severity]="getSeverity(item.status)" class="absolute dark:!bg-purple-800"
-                  [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+      <ng-container *ngIf="missoesRecomendadas.length > 0; else semMissoesRecomendadas">
+        <p-carousel [value]="missoesRecomendadas" [numVisible]="2" [numScroll]="1" [circular]="true"
+          [responsiveOptions]="responsiveOptions" [autoplayInterval]="3000">
+          <ng-template pTemplate="item" let-item>
+            <div class="border border-purple-200 dark:border-purple-700 rounded m-2 p-4 bg-slate-100">
+              <div class="mb-3">
+                <div class="relative mx-auto">
+                  <p-tag [value]="item.status" [severity]="getSeverity(item.status)"
+                    class="absolute dark:!bg-purple-800" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+                </div>
+              </div>
+              <div class="info-card mt-10">
+                <div class="mt-4 font-medium">{{ item.titulo }}</div>
+                <div class="mt-4 font-medium">localizacao:
+                  <span class="font-span-card">
+                    {{ item.localizacao }}
+
+                  </span>
+                </div>
+                <div class="mt-4 font-medium">Data criação:
+                  <span class="font-span-card">
+                    {{ item.dataCriacao | date: 'dd/mm/yyyy'}}
+
+                  </span>
+                </div>
+                <div class="mt-4 font-medium">Recompensa:
+                  <span class="font-span-card">
+                    {{ item.recompensa }}
+                  </span>
+                </div>
+                <div class="mt-4 font-medium">Tipo de missão:
+                  <span class="font-span-card">
+                    {{ item.tipoMissao }}
+                  </span>
+                </div>
+                <div class="mt-4 font-medium">Classe preferida:
+                  <span class="font-span-card">
+                    {{ item.classePreferida }}
+                  </span>
+                </div>
+                <div class="mt-4 font-medium">Descrição:
+                  <span class="font-span-card">
+                    {{ item.descricao }}
+                  </span>
+                </div>
+              </div>
+              <div class="flex justify-between items-center">
+                <div class="mt-0 font-semibold text-xl text-purple-800">{{ 'Nível mínimo: ' + item.nivelMinimo }}</div>
+
+                <span *ngIf="usuarioLogado.tipoUsuario === 'Aventureiro' ">
+                  <ng-container *ngIf="reputacaoData.bloqueioDias === 0; else blockedHome">
+                    <p-button label="Aceitar" icon="pi pi-check-circle" styleClass="ml-2"
+                      (click)="dialogConfirm(item.id)" />
+                    <p-button label="Aceitar com Grupo" severity="contrast" icon="pi pi-check-circle" styleClass="ml-2"
+                      (click)="dialogConfirmMissaoComGrupo(item.id)" />
+                  </ng-container>
+                  <ng-template #blockedHome>
+                    <p-message severity="error"
+                      [text]="'Bloqueado por ' + reputacaoData.bloqueioDias + ' dias'"></p-message>
+                  </ng-template>
+                </span>
+
+                <span *ngIf="usuarioLogado.tipoUsuario === 'Criador' && usuarioLogado.usuarioId === item.idCriador">
+                  <p-button label="Editar" icon="pi pi-pen-to-square" styleClass="ml-2"
+                    (click)="dialogCreateMissao(item.id)" />
+                </span>
+                <span *ngIf="usuarioLogado.usuarioId === item.idCriador ">
+                  <p-button label="Excluir" icon="pi pi-trash" styleClass="ml-2" severity="danger"
+                    (click)="deletarMissaoId(item.id)" />
+                </span>
               </div>
             </div>
-            <div class="info-card mt-10">
-              <div class="mt-4 font-medium">{{ item.titulo }}</div>
-              <div class="mt-4 font-medium">localizacao:
-                <span class="font-span-card">
-                  {{ item.localizacao }}
-
-                </span>
-              </div>
-              <div class="mt-4 font-medium">Data criação:
-                <span class="font-span-card">
-                  {{ item.dataCriacao | date: 'dd/mm/yyyy'}}
-
-                </span>
-              </div>
-              <div class="mt-4 font-medium">Recompensa:
-                <span class="font-span-card">
-                  {{ item.recompensa }}
-                </span>
-              </div>
-              <div class="mt-4 font-medium">Tipo de missão:
-                <span class="font-span-card">
-                  {{ item.tipoMissao }}
-                </span>
-              </div>
-              <div class="mt-4 font-medium">Classe preferida:
-                <span class="font-span-card">
-                  {{ item.classePreferida }}
-                </span>
-              </div>
-              <div class="mt-4 font-medium">Descrição:
-                <span class="font-span-card">
-                  {{ item.descricao }}
-                </span>
-              </div>
-            </div>
+          </ng-template>
+        </p-carousel>
+      </ng-container>
+      <ng-template #semMissoesRecomendadas>
+        <div style="width: 100%; display: flex; align-items: center; justify-content: center">
+          <div class="w-200">
+            <p-message severity="warn" [text]="'Nenhuma missão recomendada para o seu perfil'"></p-message>
           </div>
-        </ng-template>
-      </p-carousel>
+        </div>
+      </ng-template>
     </div>
   </div>
   <div class="letf-home">
@@ -152,6 +186,16 @@
     </div>
   </div>
 </div>
+<div class="card flex justify-center">
+  <p-dialog header="Modal de confirmação" [modal]="true" [(visible)]="visibleAceitarComGrupo" [style]="{ width: '25rem' }">
+    <span class="p-text-secondary block mb-8">Tem certeza que deseja aceitar a missão?</span>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" (click)="visibleAceitarComGrupo = false" />
+      <p-button label="Confirmar" (click)="aceitarMissaoComGrupo(idMissao)" />
+    </div>
+  </p-dialog>
+</div>
+
 <div class="card flex justify-center">
   <p-dialog header="Modal de confirmação" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
     <span class="p-text-secondary block mb-8">Tem certeza que deseja aceitar a missão?</span>
