@@ -174,20 +174,12 @@
     </div>
   </div>
   <div class="letf-home">
-    <div class="conteudo-left">
-      <div class="img-home-1">
-        <div class="text-image-1" *ngIf="usuarioLogado">
-          Olá, {{usuarioLogado.tipoUsuario}} {{usuarioLogado.nome}}! Aceite novas missões, não perca a oportunidade de
-          se divertir com seu grupo.
-        </div>
-        <div class="text-image-1" *ngIf="false">
-        </div>
-      </div>
-    </div>
+    <app-ranks></app-ranks>
   </div>
 </div>
 <div class="card flex justify-center">
-  <p-dialog header="Modal de confirmação" [modal]="true" [(visible)]="visibleAceitarComGrupo" [style]="{ width: '25rem' }">
+  <p-dialog header="Modal de confirmação" [modal]="true" [(visible)]="visibleAceitarComGrupo"
+    [style]="{ width: '25rem' }">
     <span class="p-text-secondary block mb-8">Tem certeza que deseja aceitar a missão?</span>
     <div class="flex justify-end gap-2">
       <p-button label="Cancelar" severity="secondary" (click)="visibleAceitarComGrupo = false" />

@@ -128,8 +128,8 @@ export class HomeComponent {
           this.groupIdUserLogged = response[0].idGrupo;
         }
       },
-      error: (error) => {
-        console.error('Erro ao buscar detalhes do usuário :', error);
+      error: (error: HttpErrorResponse) => {
+        console.error('Erro ao buscar detalhes do usuário :', error.error?.message || error.message);
       }
     });
   }
@@ -139,8 +139,8 @@ export class HomeComponent {
       next: (data) => {
         this.reputacaoData = data;
       },
-      error: (err) => {
-        console.error('Erro ao buscar reputação:', err);
+      error: (err: HttpErrorResponse) => {
+        console.error('Erro ao buscar reputação:', err.error?.message || err.message);
       },
     });
   }
@@ -252,7 +252,13 @@ export class HomeComponent {
           this.formMissao.reset();
           this.visibleModalCreateMissao = false;
         },
-        error: () => { },
+        error: (err: HttpErrorResponse) => {
+          if (err.error && err.error.message) {
+            this._snackbarService.showError(err.error.message);
+          } else {
+            this._snackbarService.showError('Ocorreu um erro ao atualizar a missão.');
+          }
+        },
       });
   }
 
@@ -278,7 +284,13 @@ export class HomeComponent {
           console.log(this.formMissao.getRawValue());
           this.editMode = true;
         },
-        error: () => { },
+        error: (err: HttpErrorResponse) => {
+          if (err.error && err.error.message) {
+            this._snackbarService.showError(err.error.message);
+          } else {
+            this._snackbarService.showError('Ocorreu um erro ao buscar a missão.');
+          }
+        },
       });
     }
 
@@ -293,7 +305,11 @@ export class HomeComponent {
         this.getMissoes();
       },
       error: (err: HttpErrorResponse) => {
-        this._snackbarService.showSuccess(err.message);
+        if (err.error && err.error.message) {
+          this._snackbarService.showError(err.error.message);
+        } else {
+          this._snackbarService.showError('Ocorreu um erro ao deletar a missão.');
+        }
       },
     });
   }
@@ -309,7 +325,12 @@ export class HomeComponent {
         this.visibleAceitarComGrupo = false;        
         this.getMissoes();
       },
-      error: (err: HttpErrorResponse) => {        this._snackbarService.showError(err.message);
+      error: (err: HttpErrorResponse) => {
+        if (err.error && err.error.message) {
+          this._snackbarService.showError(err.error.message);
+        } else {
+          this._snackbarService.showError('Ocorreu um erro ao aceitar a missão com o grupo.');
+        }
       },
     })
   }

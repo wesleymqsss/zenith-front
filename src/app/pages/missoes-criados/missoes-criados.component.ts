@@ -10,6 +10,7 @@ import { ReputacaoResponse } from '../../core/interface/usuario';
 import { AvaliacaoMissaoService } from '../../core/service/avaliacao-missao.service';
 import { UsuarioService } from '../../core/service/usuario.service';
 import { AvaliacoesResponse } from '../../core/interface/avaliacoesResponse';
+import { GrupoService } from '../../core/service/grupo.service';
 
 @Component({
   selector: 'app-missoes-criados',
@@ -48,6 +49,7 @@ export class MissoesCriadosComponent {
     private readonly _snackbarService: SnackbarService,
     private readonly _fb: FormBuilder,
     private readonly _usuarioService: UsuarioService,
+    private readonly _grupoService: GrupoService,
   ) { }
 
   ngOnInit() {
@@ -85,8 +87,8 @@ export class MissoesCriadosComponent {
           this.getMissoesPorGrupo();
         }
       },
-      error: (error) => {
-        console.error('Erro ao buscar detalhes do usuário :', error);
+      error: (error: HttpErrorResponse) => {
+        console.error('Erro ao buscar detalhes do usuário :', error.error?.message || error.message);
       }
     });
   }
@@ -128,8 +130,8 @@ export class MissoesCriadosComponent {
       next: (data) => {
         this.reputacaoData = data;
       },
-      error: (err) => {
-        console.error('Erro ao buscar reputação:', err);
+      error: (err: HttpErrorResponse) => {
+        console.error('Erro ao buscar reputação:', err.error?.message || err.message);
       },
     });
   }
@@ -160,7 +162,13 @@ export class MissoesCriadosComponent {
         this.getReputacao(this.usuarioLogado.usuarioId);
         this.getMissoesPorUsuario();
       },
-      error: (err) => this._snackbarService.showError('Erro ao concluir missão.')
+      error: (err: HttpErrorResponse) => {
+        if (err.error && err.error.message) {
+          this._snackbarService.showError(err.error.message);
+        } else {
+          this._snackbarService.showError('Erro ao concluir missão.');
+        }
+      }
     });
   }
 
@@ -178,7 +186,13 @@ export class MissoesCriadosComponent {
         this.visibleModalCreateMissao = false;
         this.formCancelarMissao.reset();
       },
-      error: (err) => this._snackbarService.showError('Erro ao cancelar missão.')
+      error: (err: HttpErrorResponse) => {
+        if (err.error && err.error.message) {
+          this._snackbarService.showError(err.error.message);
+        } else {
+          this._snackbarService.showError('Erro ao cancelar missão.');
+        }
+      }
     });
   }
 
@@ -189,7 +203,11 @@ export class MissoesCriadosComponent {
         this.getMissoesPorUsuario();
       },
       error: (err: HttpErrorResponse) => {
-        this._snackbarService.showError(err.message);
+        if (err.error && err.error.message) {
+          this._snackbarService.showError(err.error.message);
+        } else {
+          this._snackbarService.showError('Ocorreu um erro ao deletar a missão.');
+        }
       },
     });
   }
@@ -204,10 +222,12 @@ export class MissoesCriadosComponent {
     });
   }
 
-  abrirModalAvaliacao(missaoId: number, aventureiroId: number, nota: any) {
+  abrirModalAvaliacao(missaoId: number, aventureiroId: number, nota: any, idGrupo?: number) {
+    const idAvaliado = idGrupo ? idGrupo : aventureiroId;
+
     this.formAvaliacao.patchValue({
       idMissao: missaoId,
-      idAvaliado: aventureiroId,
+      idAvaliado: idAvaliado,
       nota: nota,
     });
     this.visibleModalAvalicao = true;
@@ -227,10 +247,10 @@ export class MissoesCriadosComponent {
         this.formAvaliacao.reset();
         this.getMissoesPorUsuario();
       },
-
-      error: (err) => {
-        console.error('Erro ao registrar avaliação:', err);
-        this._snackbarService.showError('Erro ao registrar avaliação. Por favor, tente novamente.');
+      error: (err: HttpErrorResponse) => {
+        console.error('Erro ao registrar avaliação:', err.error?.message || err.message);
+        const errorMsg = err.error?.message || err.message;
+        this._snackbarService.showError(`Erro ao registrar avaliação. Por favor, tente novamente.${errorMsg ? ' Detalhes: ' + errorMsg : ''}`);
       },
     });
   }
@@ -243,7 +263,9 @@ export class MissoesCriadosComponent {
         this.getUserId(this.usuarioLogado.usuarioId);
       },
       error: (httpError: HttpErrorResponse) => {
-        if (httpError.status === 400) {
+        if (httpError.error && httpError.error.message) {
+          this._snackbarService.showWarn(httpError.error.message);
+        } else if (httpError.status === 400) {
           this._snackbarService.showWarn('Level inválido. Por favor, insira um número válido.');
         } else {
           this._snackbarService.showError('Ocorreu um erro ao atualizar o level. Por favor, tente novamente.');
@@ -259,10 +281,38 @@ export class MissoesCriadosComponent {
         this.avaliacoesUsuarioLogado = response;
         console.log('Avaliações do usuário logado:', response);
       },
-      error: (err) => {
-        console.error('Erro ao buscar avaliações do usuário logado:', err);
-        this._snackbarService.showError('Erro ao buscar avaliações. Por favor, tente novamente.');
+      error: (err: HttpErrorResponse) => {
+        console.error('Erro ao buscar avaliações do usuário logado:', err.error?.message || err.message);
+        if (err.error && err.error.message) {
+          this._snackbarService.showError(err.error.message);
+        } else {
+          this._snackbarService.showError('Erro ao buscar avaliações. Por favor, tente novamente.');
+        }
       }
+    });
+  }
+
+  concluirMissaoComGrupo(idMissao: number) {
+    if (!this.grupoUserIdLogged) {
+      this._snackbarService.showWarn('Você precisa estar em um grupo para concluir missões com grupo.');
+      return;
+    }
+
+    this._grupoService.concluirMissaoComGrupo(idMissao, this.grupoUserIdLogged).subscribe({
+      next: () => {
+        this._snackbarService.showSuccess('Missão concluída com grupo com sucesso!');         
+        this.getReputacao(this.usuarioLogado.usuarioId);
+        this.getMissoesPorGrupo();
+        this.getMissoesPorUsuario();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Erro ao concluir missão com grupo:', err.error?.message || err.message);
+        if (err.error && err.error.message) {
+          this._snackbarService.showError(err.error.message);
+        } else {
+          this._snackbarService.showError('Erro ao concluir missão com grupo. Por favor, tente novamente.');
+        }
+      },
     });
   }
 }

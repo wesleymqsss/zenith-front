@@ -1,0 +1,124 @@
+.ranking-container {
+  background: rgba(20, 10, 40, 0.7);
+  border: 1px solid #7c3aed;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+  color: white;
+  width: 100%;
+  margin: 0 auto;
+
+  .ranking-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #e9d5ff;
+      text-shadow: 0 0 10px rgba(233, 213, 255, 0.5);
+      margin: 0;
+    }
+
+    .ranking-icon {
+      font-size: 2rem;
+      color: #f59e0b;
+      text-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+    }
+  }
+
+  .ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ranking-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 8px 10px;
+    transition: transform 0.2s ease, background 0.2s ease;
+    border-left: 4px solid transparent;
+
+    &:hover {
+      transform: translateX(5px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &.top-1 {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border-left-color: #f59e0b;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
+    }
+
+    &.top-2 {
+      background: linear-gradient(90deg, rgba(156, 163, 175, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border-left-color: #9ca3af;
+    }
+
+    &.top-3 {
+      background: linear-gradient(90deg, rgba(217, 119, 6, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border-left-color: #d97706;
+    }
+
+    .rank-position {
+      width: 45px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #a78bfa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .group-info {
+      flex: 1;
+      padding-left: 10px;
+
+      .group-name {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 4px;
+        color: #f3f4f6;
+      }
+
+      .group-stats {
+        display: flex;
+        gap: 12px;
+        font-size: 0.85rem;
+        color: #c4b5fd;
+
+        span {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+      }
+    }
+
+    .group-score {
+      padding-left: 0.25rem;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+
+      .success-rate-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        color: #9ca3af;
+      }
+
+      .success-rate-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #10b981;
+        text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+      }
+    }
+  }
+}

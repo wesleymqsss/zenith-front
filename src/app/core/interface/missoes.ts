@@ -11,6 +11,7 @@ export interface MissaoResponse {
   status: string;
   dataCriacao: string;
   idAventureiro: number;
+  idGrupo: number;
 }
 
 export interface CriarMissaoPayload {

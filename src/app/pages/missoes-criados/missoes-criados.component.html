@@ -41,7 +41,8 @@
     </div>
 
     <ng-container *ngIf="minhasMissoesResponse.length > 0">
-        <div style="color: #FFF; font-weight: bold;font-size: 20px;">Missões Solo</div>
+        <div style="color: #FFF; font-weight: bold;font-size: 20px;" *ngIf="usuarioLogado.tipoUsuario.toLowerCase() !== 'criador'" >Missões Solo</div>
+        <div style="color: #FFF; font-weight: bold;font-size: 20px;" *ngIf="usuarioLogado.tipoUsuario.toLowerCase() === 'criador'" >Missões</div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style="  max-height: 50vh;
             overflow: auto; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; padding: 16px; border-radius: 8px;">
 
@@ -75,7 +76,7 @@
 
                             <div class="card flex justify-center">
                                 <p-rating
-                                    (onRate)="abrirModalAvaliacao(missao.id,missao.idAventureiro , $event.value)" />
+                                    (onRate)="abrirModalAvaliacao(missao.id,missao.idAventureiro , $event.value, missao.idGrupo)" />
                             </div>
 
                         </ng-container>
@@ -138,7 +139,7 @@
 
                             <div class="card flex justify-center">
                                 <p-rating
-                                    (onRate)="abrirModalAvaliacao(missao.id,missao.idAventureiro , $event.value)" />
+                                    (onRate)="abrirModalAvaliacao(missao.idGrupo,missao.idAventureiro , $event.value)" />
                             </div>
 
                         </ng-container>
@@ -149,10 +150,10 @@
                     </div>
 
                     <ng-container
-                        *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro' && missao.status === 'Em andamento'">
+                        *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro' && (missao.status === 'Em andamento' || missao.status === 'Aceita')">
                         <div class="flex gap-2" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated">
                             <p-button label="Concluir" styleClass="p-button-success"
-                                (click)="concluirMissao(missao.id)"></p-button>
+                                (click)="concluirMissaoComGrupo(missao.id)"></p-button>
                             <p-button label="Cancelar" styleClass="p-button-danger"
                                 (click)="abrirDialogCancelarMissao(missao.id)"></p-button>
                         </div>

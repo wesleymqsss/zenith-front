@@ -18,6 +18,7 @@ import { CardReputacaoComponent } from './card-reputacao/card-reputacao.componen
 import { CarrosselMinhasAvaliacoesComponent } from './carrossel-minhas-avaliacoes/carrossel-minhas-avaliacoes.component';
 import { ListaEventureiroComponent } from './lista-eventureiro/lista-eventureiro.component';
 import { ListaGruposComponent } from './lista-grupos/lista-grupos.component';
+import { RanksComponent } from './ranks/ranks.component';
 
 @NgModule({
     declarations: [
@@ -42,8 +43,8 @@ import { ListaGruposComponent } from './lista-grupos/lista-grupos.component';
         DirectivesModule,
         ReactiveFormsModule,
         TagModule,
-        DataViewModule
-        
+        DataViewModule,
+        RanksComponent
     ],
     exports: [
         FormsModule,
@@ -58,9 +59,9 @@ import { ListaGruposComponent } from './lista-grupos/lista-grupos.component';
         TagModule,
         DataViewModule,
         CarrosselMinhasAvaliacoesComponent,
-        ListaEventureiroComponent
-        ,
-        ListaGruposComponent
+        ListaEventureiroComponent,
+        ListaGruposComponent,
+        RanksComponent
     ]
 })
 export class SharedModule { }

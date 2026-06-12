@@ -13,14 +13,14 @@ export class GrupoService {
 
   constructor(private readonly _http: HttpClient) { }
 
-  criarGrupo(payloadGrupo: GrupoRequest):Observable <GrupoResponse> {
+  criarGrupo(payloadGrupo: GrupoRequest): Observable<GrupoResponse> {
     return this._http.post<GrupoResponse>(`${this.url}`, payloadGrupo);
   }
 
   getGrupos(): Observable<GrupoResponse[]> {
     return this._http.get<GrupoResponse[]>(`${this.url}`);
   }
-  
+
   convidarParaGrupo(idGrupo: number, payloadConvidarGrupo: ConvidarGrupoRequest): Observable<any> {
     return this._http.post(`${this.url}/${idGrupo}/membros`, payloadConvidarGrupo);
   }
@@ -29,8 +29,11 @@ export class GrupoService {
     return this._http.get<MembroGrupoResponse[]>(`${this.url}/${idGrupo}/membros`);
   }
 
-  aceitarMissaoComGrupo(idMissao : number, idGrupo: number): Observable<any> {
+  aceitarMissaoComGrupo(idMissao: number, idGrupo: number): Observable<any> {
     return this._http.post<any>(`${this.url}/${idGrupo}/missoes/${idMissao}/aceitar`, null);
   }
-  
+
+  concluirMissaoComGrupo(idMissao: number, idGrupo: number): Observable<any> {
+    return this._http.put<any>(`${this.url}/${idGrupo}/missoes/${idMissao}/concluir`, null);
+  }
 }
