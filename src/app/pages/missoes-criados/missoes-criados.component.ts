@@ -72,6 +72,8 @@ export class MissoesCriadosComponent {
     this.formAvaliacao = this._fb.group({
       idMissao: [0],
       idAvaliado: [0],
+      idGrupo: [0],
+      isGrupo: [false],
       nota: [0],
       justificativa: [""],
     });
@@ -223,13 +225,16 @@ export class MissoesCriadosComponent {
   }
 
   abrirModalAvaliacao(missaoId: number, aventureiroId: number, nota: any, idGrupo?: number) {
-    const idAvaliado = idGrupo ? idGrupo : aventureiroId;
+    const isGrupo = idGrupo ? true : false;
 
     this.formAvaliacao.patchValue({
       idMissao: missaoId,
-      idAvaliado: idAvaliado,
+      idAvaliado: aventureiroId,
+      idGrupo: idGrupo,
+      isGrupo: isGrupo,
       nota: nota,
     });
+
     this.visibleModalAvalicao = true;
   }
 
@@ -239,20 +244,35 @@ export class MissoesCriadosComponent {
   }
 
   salvarAvaliacao() {
-    console.log('Payload de avaliação:', this.formAvaliacao.value);
-    this._avaliacaoMissaoService.avalicaoMissao(this.formAvaliacao.value).subscribe({
-      next: () => {
-        this._snackbarService.showSuccess('Avaliação registrada com sucesso!');
-        this.visibleModalAvalicao = false;
-        this.formAvaliacao.reset();
-        this.getMissoesPorUsuario();
-      },
-      error: (err: HttpErrorResponse) => {
-        console.error('Erro ao registrar avaliação:', err.error?.message || err.message);
-        const errorMsg = err.error?.message || err.message;
-        this._snackbarService.showError(`Erro ao registrar avaliação. Por favor, tente novamente.${errorMsg ? ' Detalhes: ' + errorMsg : ''}`);
-      },
-    });
+    if (this.formAvaliacao.value.isGrupo) {
+      this._grupoService.avaliarMissaoGrupo(this.formAvaliacao.value).subscribe({
+        next: () => {
+          this._snackbarService.showSuccess('Avaliação registrada com sucesso!');
+          this.visibleModalAvalicao = false;
+          this.formAvaliacao.reset();
+          this.getMissoesPorUsuario();
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error('Erro ao registrar avaliação:', err.error?.message || err.message);
+          const errorMsg = err.error?.message || err.message;
+          this._snackbarService.showError(`Erro ao registrar avaliação. Por favor, tente novamente.${errorMsg ? ' Detalhes: ' + errorMsg : ''}`);
+        },
+      });
+    } else {
+      this._avaliacaoMissaoService.avalicaoMissao(this.formAvaliacao.value).subscribe({
+        next: () => {
+          this._snackbarService.showSuccess('Avaliação registrada com sucesso!');
+          this.visibleModalAvalicao = false;
+          this.formAvaliacao.reset();
+          this.getMissoesPorUsuario();
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error('Erro ao registrar avaliação:', err.error?.message || err.message);
+          const errorMsg = err.error?.message || err.message;
+          this._snackbarService.showError(`Erro ao registrar avaliação. Por favor, tente novamente.${errorMsg ? ' Detalhes: ' + errorMsg : ''}`);
+        },
+      });
+    }
   }
 
   atualizarLevel() {
@@ -300,7 +320,7 @@ export class MissoesCriadosComponent {
 
     this._grupoService.concluirMissaoComGrupo(idMissao, this.grupoUserIdLogged).subscribe({
       next: () => {
-        this._snackbarService.showSuccess('Missão concluída com grupo com sucesso!');         
+        this._snackbarService.showSuccess('Missão concluída com grupo com sucesso!');
         this.getReputacao(this.usuarioLogado.usuarioId);
         this.getMissoesPorGrupo();
         this.getMissoesPorUsuario();

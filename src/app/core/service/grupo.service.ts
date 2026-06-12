@@ -36,4 +36,15 @@ export class GrupoService {
   concluirMissaoComGrupo(idMissao: number, idGrupo: number): Observable<any> {
     return this._http.put<any>(`${this.url}/${idGrupo}/missoes/${idMissao}/concluir`, null);
   }
+
+  avaliarMissaoGrupo(payload:any): Observable<any> {
+    const payloadRequest = {
+      idMissao: payload.idMissao,
+      idGrupo: payload.idGrupo,
+      nota: payload.nota,
+      justificativa: payload.justificativa,
+    };
+    return this._http.post<any>(`${environment.api_url}Avaliacoes/grupo`, payloadRequest);
+  
+  } 
 }
