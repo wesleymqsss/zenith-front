@@ -322,7 +322,7 @@ export class HomeComponent {
     this._grupoService.aceitarMissaoComGrupo(idMissao, this.groupIdUserLogged).subscribe({
       next: () => {
         this._snackbarService.showSuccess('Missão aceita com sucesso!');
-        this.visibleAceitarComGrupo = false;        
+        this.visibleAceitarComGrupo = false;
         this.getMissoes();
       },
       error: (err: HttpErrorResponse) => {

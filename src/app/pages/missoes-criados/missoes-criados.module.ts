@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { AccordionModule } from 'primeng/accordion';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../core/material/material.module';
+import { TooltipModule } from 'primeng/tooltip';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 @NgModule({
     declarations: [MissoesCriadosComponent],
@@ -19,7 +21,9 @@ import { MaterialModule } from '../../core/material/material.module';
         ButtonModule,
         AccordionModule,
         FormsModule, ReactiveFormsModule,
-        MaterialModule
+        MaterialModule,
+        TooltipModule,
+        QRCodeComponent
     ],
     exports: [MissoesCriadosComponent]
 })

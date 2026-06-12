@@ -12,6 +12,9 @@ export interface MissaoResponse {
   dataCriacao: string;
   idAventureiro: number;
   idGrupo: number;
+  pixCopiaECola?: string;
+  statusPagamento?: string;
+  pagamentoRealizado?: boolean;
 }
 
 export interface CriarMissaoPayload {
@@ -54,4 +57,9 @@ export interface MissaoRecomendadaResponse {
   idCriador: number;
   nomeCriador: string;
   score: number;
+}
+
+export interface PixResponse {
+  message: string;
+  pixCopiaECola: string;
 }

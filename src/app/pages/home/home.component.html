@@ -88,6 +88,9 @@
     <div class="carrousel-cont" *ngIf="usuarioLogado.tipoUsuario !== 'Criador'">
       <div class="mr-13 flex justify-center items-center mt-0 font-semibold text-xl text-purple-50 gap-2 p-2">
         <span>Missões Recomendadas Para o Seu Perfil</span>
+        <i class="pi pi-info-circle cursor-pointer text-xl text-purple-300 hover:text-purple-100 transition-colors"
+           pTooltip="Nossa inteligência da guilda analisa sua Classe e seu Nível atual para sugerir os contratos perfeitos. Missões recomendadas oferecem o melhor equilíbrio entre desafio e recompensa para o seu momento na jornada."
+           tooltipPosition="top"></i>
       </div>
       <ng-container *ngIf="missoesRecomendadas.length > 0; else semMissoesRecomendadas">
         <p-carousel [value]="missoesRecomendadas" [numVisible]="2" [numScroll]="1" [circular]="true"

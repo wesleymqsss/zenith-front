@@ -1,4 +1,4 @@
-export interface UserDetails {
+export interface  UserDetails {
   id: number;
   email: string;
   tipoPerfil: number | null;
@@ -15,6 +15,9 @@ export interface UserDetails {
   sobreNos: string | null;
   idGrupo: number;
   nivel: number | null;
+  tipoUsuario: string;
+  reputacao: number | null;
+  classe: string | null;
 }
 
 

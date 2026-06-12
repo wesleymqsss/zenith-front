@@ -3,7 +3,12 @@
 <div class="container mx-auto p-2">
     <div class="mb-6 flex justify-between "
         *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro'">
-        <app-card-reputacao [dados]="reputacaoData"></app-card-reputacao>
+        <div class="flex items-start mt-2">
+            <app-card-reputacao [dados]="reputacaoData"></app-card-reputacao>
+            <i class="pi pi-info-circle text-purple-500 cursor-pointer ml-2 text-2xl" 
+               pTooltip="Sua Reputação mede sua honra e confiabilidade em Zenith! Você ganha pontos ao receber boas avaliações (ganhando um bônus extra se a missão for de nível alto) e ao concluir contratos. Cuidado: cancelar missões ou receber notas baixas diminui sua pontuação." 
+               tooltipPosition="right"></i>
+        </div>
         <div class="m-2 p-1 border-round bg-surface-50 dark:bg-surface-800 transition-colors duration-200 ng-star-inserted"
             style="width: 20%;  background-color: #fff; padding: 1rem; border-radius: 8px;" class="flex flex-col gap-2">
             <label for="email" class="text-xs font-semibold text-secondary uppercase tracking-wider">Alterar
@@ -27,7 +32,19 @@
                 </h1>
             </div>
         </div>
-        <app-carrossel-minhas-avaliacoes [avaliacoes]="avaliacoesUsuarioLogado"></app-carrossel-minhas-avaliacoes>
+        <div class="flex items-start mt-2">
+            <ng-container *ngIf="avaliacoesUsuarioLogado.length > 0; else semAvaliacoes">
+                <app-carrossel-minhas-avaliacoes [avaliacoes]="avaliacoesUsuarioLogado"></app-carrossel-minhas-avaliacoes>
+            </ng-container>
+            <ng-template #semAvaliacoes>
+                <div class="p-4 bg-white dark:bg-surface-900 shadow-2 border-round-xl flex items-center justify-center text-center" style="width: 400px; height: 100%; min-height: 120px;">
+                    <p-message severity="info" [text]="'Você ainda não possui avaliações.'"></p-message>
+                </div>
+            </ng-template>
+            <i class="pi pi-info-circle text-purple-500 cursor-pointer ml-2 text-2xl" 
+               pTooltip="Após a conclusão de um contrato, os envolvidos avaliam o desempenho de 1 a 5 estrelas. Notas de 3 estrelas ou mais garantem o crescimento da Reputação do herói, com multiplicadores baseados na dificuldade da missão. Seja justo e honrado!" 
+               tooltipPosition="left"></i>
+        </div>
     </div>
 
     <div class="flex flex-wrap gap-2 mb-6 p-4 bg-surface-50 dark:bg-surface-900 shadow-1" style="border-radius: 8px;">
@@ -86,13 +103,34 @@
                         </p-button>
                     </div>
 
+                    <ng-container *ngIf="missao.status === 'Concluída' && usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'criador' && !missao.pagamentoRealizado">
+                        <div class="flex flex-col gap-2 mt-3 pt-3" style="border-top: 1px solid #dee2e6;">
+                            <p-button *ngIf="!missao.pixCopiaECola" 
+                                label="Pagar com PIX" 
+                                icon="pi pi-qrcode" 
+                                styleClass="p-button-success p-button-sm w-full text-sm" 
+                                (click)="gerarPixPagamento(missao)">
+                            </p-button>
+                            
+                            <p-button *ngIf="missao.pixCopiaECola" 
+                                label="Visualizar PIX" 
+                                icon="pi pi-external-link" 
+                                styleClass="p-button-outlined p-button-sm w-full text-sm" 
+                                (click)="abrirModalPix(missao.pixCopiaECola)">
+                            </p-button>
+                        </div>
+                    </ng-container>
+
                     <ng-container
                         *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro' && missao.status === 'Em andamento'">
-                        <div class="flex gap-2" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated">
+                        <div class="flex gap-2 items-center" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated">
                             <p-button label="Concluir" styleClass="p-button-success"
                                 (click)="concluirMissao(missao.id)"></p-button>
                             <p-button label="Cancelar" styleClass="p-button-danger"
                                 (click)="abrirDialogCancelarMissao(missao.id)"></p-button>
+                            <i class="pi pi-info-circle text-red-500 cursor-pointer text-xl hover:text-red-400 transition-colors"
+                               pTooltip="Cuidado ao abandonar um contrato! Quebrar o acordo de uma missão em andamento prejudica sua Reputação instantaneamente e aplica um bloqueio temporário. Durante esse período, você (ou seu grupo) ficará impedido de aceitar novas missões."
+                               tooltipPosition="top"></i>
                         </div>
                         <ng-template #blockedCreated>
                             <p-message severity="error"
@@ -149,13 +187,34 @@
                         </p-button>
                     </div>
 
+                    <ng-container *ngIf="missao.status === 'Concluída' && usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'criador' && !missao.pagamentoRealizado">
+                        <div class="flex flex-col gap-2 mt-3 pt-3" style="border-top: 1px solid #dee2e6;">
+                            <p-button *ngIf="!missao.pixCopiaECola" 
+                                label="Pagar com PIX" 
+                                icon="pi pi-qrcode" 
+                                styleClass="p-button-success p-button-sm w-full text-sm" 
+                                (click)="gerarPixPagamento(missao)">
+                            </p-button>
+                            
+                            <p-button *ngIf="missao.pixCopiaECola" 
+                                label="Visualizar PIX" 
+                                icon="pi pi-external-link" 
+                                styleClass="p-button-outlined p-button-sm w-full text-sm" 
+                                (click)="abrirModalPix(missao.pixCopiaECola)">
+                            </p-button>
+                        </div>
+                    </ng-container>
+
                     <ng-container
                         *ngIf="usuarioLogado && usuarioLogado.tipoUsuario.toLowerCase() === 'aventureiro' && (missao.status === 'Em andamento' || missao.status === 'Aceita')">
-                        <div class="flex gap-2" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated">
+                        <div class="flex gap-2 items-center" *ngIf="reputacaoData.bloqueioDias === 0; else blockedCreated">
                             <p-button label="Concluir" styleClass="p-button-success"
                                 (click)="concluirMissaoComGrupo(missao.id)"></p-button>
                             <p-button label="Cancelar" styleClass="p-button-danger"
                                 (click)="abrirDialogCancelarMissao(missao.id)"></p-button>
+                            <i class="pi pi-info-circle text-red-500 cursor-pointer text-xl hover:text-red-400 transition-colors"
+                               pTooltip="Cuidado ao abandonar um contrato! Quebrar o acordo de uma missão em andamento prejudica sua Reputação instantaneamente e aplica um bloqueio temporário. Durante esse período, você (ou seu grupo) ficará impedido de aceitar novas missões."
+                               tooltipPosition="top"></i>
                         </div>
                         <ng-template #blockedCreated>
                             <p-message severity="error"
@@ -200,6 +259,25 @@
             <div class=" w-full flex gap-5  justify-end">
                 <p-button label="Cancelar" severity="secondary" (click)="visibleModalCreateMissao = false" />
                 <p-button label="Salvar" (click)="cancelarMissao()" />
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<div class="card flex justify-center">
+    <p-dialog header="Pagamento via PIX" [modal]="true" [(visible)]="visibleModalPix" [style]="{ width: '30rem', maxWidth: '90vw' }">
+        <div class="flex flex-col items-center gap-4 py-4" *ngIf="pixCopiaEColaAtual">
+            <div class="flex justify-center w-full bg-white p-3 border-round shadow-1" style="border-radius: 8px;">
+                <!-- Geração do componente de QRCode visível para o escaneamento -->
+                <qrcode [qrdata]="pixCopiaEColaAtual" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+            </div>
+            
+            <div class="w-full flex flex-col gap-2">
+                <label class="font-bold text-sm text-center">Pix Copia e Cola:</label>
+                <div class="flex items-center gap-2 w-full">
+                    <input pInputText type="text" [value]="pixCopiaEColaAtual" readonly class="w-full p-2 text-sm text-center" style="background: #f9fafb; border: 1px solid #ccc; border-radius: 4px; text-overflow: ellipsis;" />
+                </div>
+                <p-button icon="pi pi-copy" label="Copiar Código" styleClass="p-button-outlined w-full mt-2" (click)="copiarPix(pixCopiaEColaAtual)"></p-button>
             </div>
         </div>
     </p-dialog>

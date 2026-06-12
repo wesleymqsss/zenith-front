@@ -1,3 +1,25 @@
-<div class="header-login justify-center items-center">
+<div class="header-login flex justify-between items-center w-full px-4 mb-2">
 	<p-breadcrumb [model]="items" />
+
+    <ng-container *ngIf="userDetails">
+        <div style="border-radius: 4px;" class="flex items-center gap-3 p-1 bg-surface-50 dark:bg-surface-800 border-round shadow-1">
+          <i class="pi pi-user text-2xl text-purple-500"></i>
+          
+          <div class="flex flex-col">
+            <span class="font-bold text-purple-800 dark:text-purple-300">
+              {{ userDetails.nome }}
+            </span>
+            <span class="text-sm text-gray-600 dark:text-gray-400 font-medium">
+              {{ userDetails.classe }} • Nvl {{ userDetails.nivel }}
+            </span>
+          </div>
+      
+          <div class="flex flex-col items-end ml-4 border-l border-gray-300 pl-4">
+            <span class="text-sm font-semibold mb-1">
+              Reputação: <span class="text-green-500">{{ userDetails.reputacao }}</span>
+            </span>
+            <p-tag [value]="userDetails.tipoUsuario" severity="info"></p-tag>
+          </div>
+        </div>
+    </ng-container>
 </div>

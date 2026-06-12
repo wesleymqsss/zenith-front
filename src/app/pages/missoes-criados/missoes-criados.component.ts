@@ -41,6 +41,8 @@ export class MissoesCriadosComponent {
     reputacao: 0,
     bloqueioDias: 0,
   };
+  pixCopiaEColaAtual: string | null = null;
+  visibleModalPix: boolean = false;
 
   constructor(
     private readonly _loginService: LoginService,
@@ -334,5 +336,35 @@ export class MissoesCriadosComponent {
         }
       },
     });
+  }
+
+  gerarPixPagamento(missao: MissaoResponse) {
+    this._missoesService.gerarPix(missao.id).subscribe({
+      next: (response) => {
+        missao.pixCopiaECola = response.pixCopiaECola;
+        this.pixCopiaEColaAtual = response.pixCopiaECola;
+        this.visibleModalPix = true;
+        this._snackbarService.showSuccess('PIX gerado com sucesso!');
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Erro ao gerar PIX:', err.error?.message || err.message);
+        const errorMsg = err.error?.message || err.message;
+        this._snackbarService.showError(`Erro ao gerar PIX. ${errorMsg ? ' Detalhes: ' + errorMsg : ''}`);
+      }
+    });
+  }
+
+  copiarPix(pixCopiaECola: string) {
+    navigator.clipboard.writeText(pixCopiaECola).then(() => {
+      this._snackbarService.showSuccess('Código PIX copiado para a área de transferência!');
+    }).catch(err => {
+      console.error('Erro ao copiar PIX:', err);
+      this._snackbarService.showError('Não foi possível copiar o código PIX.');
+    });
+  }
+
+  abrirModalPix(pix: string) {
+    this.pixCopiaEColaAtual = pix;
+    this.visibleModalPix = true;
   }
 }

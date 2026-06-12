@@ -8,6 +8,7 @@ import {
   MissaoResponse,
   CancelarMissaoPayload,
   MissaoRecomendadaResponse,
+  PixResponse,
 } from '../interface/missoes';
 import { MessageResponse } from '../interface/messageResponse';
 import { ApiResponsePagina } from '../interface/respostaPaginada';
@@ -103,5 +104,9 @@ export class MissoesService {
   getMissaoRecomendada(): Observable<MissaoRecomendadaResponse[]> {
     const url = `${environment.api_url}recomendacoes/missoes`;
     return this._http.get<MissaoRecomendadaResponse[]>(`${url}`);
+  }
+
+  gerarPix(idMissao: number): Observable<PixResponse> {
+    return this._http.post<PixResponse>(`${environment.api_url}pagamentos/missoes/${idMissao}/gerar-pix`, {});
   }
 }

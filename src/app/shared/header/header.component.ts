@@ -3,6 +3,10 @@ import { MenuItem } from 'primeng/api';
 import { Drawer } from 'primeng/drawer';
 import { FormGroup } from '@angular/forms';
 import { UserDetails } from '../../core/interface/usuario';
+import { UsuarioService } from '../../core/service/usuario.service';
+import { LoginService } from '../../core/service/login.service';
+import { Logged } from '../../core/interface/userLogin';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-header',
   standalone: false,
@@ -14,7 +18,7 @@ export class HeaderComponent {
   items: MenuItem[] | undefined;
   userDetails!: UserDetails;
   newUserLogin!: any;
-
+  usuarioLogado!: Logged;
   visible: boolean = false;
   visibleEditPassword: boolean = false;
   visibleEditProfile: boolean = false;
@@ -23,7 +27,17 @@ export class HeaderComponent {
   formUpdateUser!: FormGroup;
   @ViewChild('drawerRef') drawerRef!: Drawer;
 
-  constructor() {}
+  constructor(
+    private readonly _usuarioService: UsuarioService,
+    private readonly _loginService: LoginService,
+  ) {
+    this._loginService.currentUser$.subscribe((user) => {
+      if (user) {
+        this.usuarioLogado = user;
+        this.getUserId(user.usuarioId);
+      }
+    });
+  }
 
   closeCallback(e: any): void {
     this.drawerRef.close(e);
@@ -81,7 +95,18 @@ export class HeaderComponent {
     ];
   }
 
-  ngOnChanges(changes: SimpleChanges) {}
+  ngOnChanges(changes: SimpleChanges) { }
 
-  showDialog() {}
+  getUserId(usuarioId: number) {
+    this._usuarioService.getUserDetails(usuarioId.toString()).subscribe({
+      next: (response) => {
+        this.userDetails = response[0];
+        console.log('Detalhes do usuário:', this.userDetails);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Erro ao buscar detalhes do usuário :', error.error?.message || error.message);
+      }
+    });
+  }
+
 }
