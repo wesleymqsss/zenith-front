@@ -39,3 +39,45 @@
     Nenhuma guilda classificada ainda.
   </div>
 </div>
+
+<div class="ranking-container shadow-2xl mt-6">
+  <div class="ranking-header">
+    <i class="pi pi-user ranking-icon animate-pulse"></i>
+    <h2>Ranking dos Aventureiros</h2>
+  </div>
+  
+  <div class="ranking-list" *ngIf="!loadingAventureiros && rankingAventureiros.length > 0">
+    <div *ngFor="let aventureiro of rankingAventureiros; let i = index" 
+         class="ranking-card" 
+         [ngClass]="{'top-1': i === 0, 'top-2': i === 1, 'top-3': i === 2}">
+      
+      <div class="rank-position">
+        <span *ngIf="i > 2">#{{ i + 1 }}</span>
+        <i *ngIf="i === 0" class="pi pi-star-fill text-yellow-400 text-3xl drop-shadow-md"></i>
+        <i *ngIf="i === 1" class="pi pi-star-fill text-gray-400 text-2xl drop-shadow-sm"></i>
+        <i *ngIf="i === 2" class="pi pi-star-fill text-orange-400 text-xl drop-shadow-sm"></i>
+      </div>
+      
+      <div class="group-info">
+        <div class="group-name">{{ aventureiro.nome }}</div>
+        <div class="group-stats">
+          <span><i class="pi pi-shield text-emerald-400"></i> {{ aventureiro.classe }} Nvl {{ aventureiro.nivel }}</span>
+          <span><i class="pi pi-check-circle text-purple-400"></i> {{ aventureiro.missoesConcluidas }}/{{ aventureiro.missoesTotais }} Missões</span>
+        </div>
+      </div>
+      
+      <div class="group-score">
+        <div class="success-rate-label">Reputação</div>
+        <div class="success-rate-value">{{ aventureiro.reputacao | number:'1.0-0' }}%</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loadingAventureiros" class="flex justify-center p-8">
+    <i class="pi pi-spin pi-spinner text-emerald-500 text-4xl"></i>
+  </div>
+
+  <div *ngIf="!loadingAventureiros && rankingAventureiros.length === 0" class="text-center p-6 text-gray-400">
+    Nenhum aventureiro classificado ainda.
+  </div>
+</div>

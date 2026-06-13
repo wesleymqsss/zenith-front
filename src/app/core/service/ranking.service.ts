@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { RankingGrupo } from '../interface/rankingGrupo';
+import { RankingAventureiro } from '../interface/rankingAventureiro';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,11 @@ export class RankingService {
 
   constructor(private readonly _http: HttpClient) { }
 
-  getRankingGrupos(take: number = 10): Observable<RankingGrupo[]> {
+  getRankingGrupos(take: number = 3): Observable<RankingGrupo[]> {
     return this._http.get<RankingGrupo[]>(`${this.url}grupos?take=${take}`);
+  }
+
+  getRankingAventureiros(take: number = 3): Observable<RankingAventureiro[]> {
+    return this._http.get<RankingAventureiro[]>(`${this.url}aventureiros?take=${take}`);
   }
 }
