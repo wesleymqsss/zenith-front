@@ -39,5 +39,9 @@ export class UsuarioService {
 
   atualizarLevelUsuario(novoNivel: number): Observable<any> {
     return this.http.patch(`${this.url}/me/nivel`, { novoNivel });
-  }    
+  }
+  
+  getSaldoUsuario(id: number): Observable<{ valorAcumulado: number }> { 
+    return this.http.get<{ valorAcumulado: number }>(`${this.url}/${id}/saldo`);
+  } 
 }

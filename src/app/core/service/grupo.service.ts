@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ConvidarGrupoRequest, GrupoRequest } from '../interface/grupoRequest';
 import { GrupoResponse, MembroGrupoResponse } from '../interface/grupoResponse';
 import { Observable } from 'rxjs';
+import { MensagensGrupoResponse } from '../interface/mensagensGrupoResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,13 @@ export class GrupoService {
       justificativa: payload.justificativa,
     };
     return this._http.post<any>(`${environment.api_url}Avaliacoes/grupo`, payloadRequest);
-  
   } 
+
+  getMensagensGrupo(idGrupo: number): Observable<MensagensGrupoResponse> {
+    return this._http.get<MensagensGrupoResponse>(`${this.url}/${idGrupo}/chat/mensagens`);
+  }   
+
+  sendMensagensGrupo(idGrupo: number, payload: any): Observable<MensagensGrupoResponse> {
+    return this._http.post<MensagensGrupoResponse>(`${this.url}/${idGrupo}/chat/mensagens`, payload);
+  }   
 }

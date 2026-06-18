@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { GrupoResponse, MembroGrupoResponse } from '../../core/interface/grupoResponse';
 import { GrupoService } from '../../core/service/grupo.service';
 import { SnackbarService } from '../../core/service/snackbar.service';
@@ -7,6 +7,8 @@ import { LoginService } from '../../core/service/login.service';
 import { Logged } from '../../core/interface/userLogin';
 import { UserDetails } from '../../core/interface/usuario';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MensagensGrupoResponse } from '../../core/interface/mensagensGrupoResponse';
+import { MessageResponse } from '../../core/interface/messageResponse';
 
 @Component({
   selector: 'app-lista-grupos',
@@ -22,6 +24,11 @@ export class ListaGruposComponent implements OnInit {
   grupoSelecionado!: GrupoResponse;
   membrosGrupo: MembroGrupoResponse[] = [];
   mediaReputacao: number = 0;
+
+  visibleDialogChat: boolean = false;
+  mensagensChat: MensagensGrupoResponse[] = [];
+  novaMensagem: string = '';
+  @ViewChild('chatScroll') private chatScrollContainer!: ElementRef;
 
   constructor(
     private readonly _grupoService: GrupoService,
@@ -45,6 +52,7 @@ export class ListaGruposComponent implements OnInit {
     this._usuarioService.getUserDetails(usuarioId.toString()).subscribe({
       next: (response) => {
         this.detalhesUsuario = response[0];
+        console.log('Detalhes do usuário:', this.detalhesUsuario);
       },
       error: (error) => {
         console.error('Erro ao buscar detalhes do usuário :', error);
@@ -105,6 +113,62 @@ export class ListaGruposComponent implements OnInit {
     this.visibleDialogMembros = false;
     this.membrosGrupo = [];
     this.grupoSelecionado = {} as GrupoResponse;
+  }
+
+  openChatDialog(grupo: GrupoResponse): void {
+    this.grupoSelecionado = grupo;
+    this.carregarMensagens(grupo.id);
+
+    setTimeout(() => {
+      this.visibleDialogChat = true;
+    }, 200);
+  }
+
+  closeChatDialog(): void {
+    this.visibleDialogChat = false;
+    this.mensagensChat = [];
+    this.novaMensagem = '';
+    this.grupoSelecionado = {} as GrupoResponse;
+  }
+
+  carregarMensagens(idGrupo: number): void {
+    this._grupoService.getMensagensGrupo(idGrupo).subscribe({
+      next: (response: any) => {
+        if (Array.isArray(response)) {
+          this.mensagensChat = response;
+        } else {
+          this.mensagensChat = response ? [response] : [];
+        }
+        this.scrollToBottom();
+      },
+      error: (error) => {
+        console.error('Erro ao carregar mensagens:', error);
+      }
+    });
+  }
+
+  enviarMensagem(): void {
+    if (!this.novaMensagem.trim()) return;
+
+    const payload: MessageResponse = { conteudo: this.novaMensagem };
+    
+    this._grupoService.sendMensagensGrupo(this.grupoSelecionado.id, payload).subscribe({
+      next: () => {
+        this.novaMensagem = '';
+        this.carregarMensagens(this.grupoSelecionado.id);
+      },
+      error: (error) => {
+        this._snackbarService.showError('Erro ao enviar mensagem');
+      }
+    });
+  }
+
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      if (this.chatScrollContainer && this.chatScrollContainer.nativeElement) {
+        this.chatScrollContainer.nativeElement.scrollTop = this.chatScrollContainer.nativeElement.scrollHeight;
+      }
+    }, 100);
   }
 
   calcularMediaReputacao(reputacoes: number[]): number {

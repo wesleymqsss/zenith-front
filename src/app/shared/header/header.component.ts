@@ -25,6 +25,7 @@ export class HeaderComponent {
   visibleTableHistorico: boolean = false;
   formUpdatePassword!: FormGroup;
   formUpdateUser!: FormGroup;
+  valorAcumulado!: number;
   @ViewChild('drawerRef') drawerRef!: Drawer;
 
   constructor(
@@ -35,6 +36,7 @@ export class HeaderComponent {
       if (user) {
         this.usuarioLogado = user;
         this.getUserId(user.usuarioId);
+        this.getSaldoUsuario(user.usuarioId);
       }
     });
   }
@@ -107,6 +109,10 @@ export class HeaderComponent {
         console.error('Erro ao buscar detalhes do usuário :', error.error?.message || error.message);
       }
     });
+  }
+  
+  getSaldoUsuario(usuarioId: number) {
+    this._usuarioService.getSaldoUsuario(usuarioId).subscribe((response) => this.valorAcumulado = response.valorAcumulado)
   }
 
 }

@@ -15,10 +15,16 @@
           </div>
       
           <div class="flex flex-col items-end ml-4 border-l border-gray-300 pl-4">
-            <span class="text-sm font-semibold mb-1">
+            <span class="text-sm font-semibold mb-1 text-purple-800">
               Reputação: <span class="text-green-500">{{ userDetails.reputacao }}</span>
             </span>
             <p-tag [value]="userDetails.tipoUsuario" severity="info"></p-tag>
+          </div>
+
+          <div class="flex flex-col items-end ml-4 border-l border-gray-300 pl-4">
+            <span class="text-sm font-semibold mb-1 text-purple-800">
+              Saldo: <span class="text-green-500">{{ valorAcumulado | currency:'BRL':'symbol':'1.2-2' }}</span>
+            </span>
           </div>
         </div>
     </ng-container>
